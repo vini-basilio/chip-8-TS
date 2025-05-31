@@ -1,13 +1,15 @@
 export const IBM_LOGO = [
     0x00E0,
-    0xA00,
-    0x6000,
-    0x6100,
+    0xA22A,
+    0x600C,
+    0x6108,
     0xD015,
-    0x7004,
-    0x7104,
-    0x1206,
-
+    0xA22F,
+    0x7009,
+    0xD015,
+    0xA234,
+    0x7009,
+    0xD015,
 ]
 
 export const TEST_SPRITE_PROGRAM = [
@@ -27,4 +29,14 @@ export const DRAW_E_CENTER = [
     0x610F,             // LDV1 0x0F: Carrega 0x0F (15 em decimal) no registrador V1 (Y = 32 / 2 - 5/2 = 16 - 2 = 15)
     0xD015,             // DRWV0V1 0x05: Desenha o sprite em (V0, V1) com 5 bytes de altura.
     0x120A,             // JUMP 0x20A: Loop infinito para manter o 'E' na tela
+];
+
+export const LETTER_E = [
+    0x00E0, // CLS: limpa a tela
+    0x6000, // LD V0, 0x00 (X = 0)
+    0x6100, // LD V1, 0x00 (Y = 0)
+    0xA000, // LD I, 0x200 (endereço onde vamos guardar o sprite)
+
+    // DXYN: desenha sprite de 5 bytes começando em I, na posição (V0, V1)
+    0xD015,
 ];

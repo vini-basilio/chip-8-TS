@@ -40,7 +40,10 @@ export default class CHIP8Screen {
     }
 
     getPixel(rows: number, cols: number){
-        return  this.pixelsState[rows][cols];
+        const row  = this.pixelsState[rows]
+        console.log(row)
+        const result  = row[cols]
+        return  result;
 
     }
     setPixel(rows: number, cols: number, state: number){
@@ -55,7 +58,7 @@ export default class CHIP8Screen {
             let columns = 0;
 
             if(ctx){
-
+                ctx.clearRect(0,0, this.canvas.width, this.canvas.height)
                 for(let row = 0; row < this.rows ; row++){
                     for(let col = 0; col < this.columns; col++) {
                         ctx.fillStyle = 'transparent';

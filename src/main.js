@@ -4,7 +4,7 @@ import {CreateMemory} from "./CHIP-8/CreateMemory.js";
 import { Cpu } from "./CHIP-8/Cpu.js";
 
 import CHIP8Screen from "./CHIP-8/CHIP8Screen.js";
-import {DRAW_E_CENTER, IBM_LOGO, TEST_SPRITE_PROGRAM} from "./CHIP-8/ROMS_DEBUG/IBM_LOGO.js";
+import {DRAW_E_CENTER, IBM_LOGO, LETTER_E, TEST_SPRITE_PROGRAM} from "./CHIP-8/ROMS_DEBUG/IBM_LOGO.js";
 
 const canvas = document.querySelector('#canvas')
 
@@ -15,15 +15,42 @@ const CPU = new Cpu(CreateMemory, RAM, SCREEN)
 let i = 0;
 
 // 0x200 - 0xFFF (512 - 4095 bytes): Área do Programa (Onde o Jogo é Carregado)
-TEST_SPRITE_PROGRAM.forEach(
+IBM_LOGO.forEach(
     (instrution16bit, index8bitSize) =>
     {
-        RAM.setInt16((index8bitSize * 2) + 0x200, instrution16bit)
+        RAM.setInt16((index8bitSize * 2) + 0x800, instrution16bit)
     }
 )
 
+const IBM_LETTER = [
+    0xF0, // ████   ← topo da letra
+    0x20, //   █    ← haste
+    0x20, //   █    ← haste
+    0x20, //   █    ← haste
+    0xF0 , // ████   ← base
+
+    // // B
+    0xF0, // ████
+    0x90, // █  █
+    0xF0, // ████
+    0x90, // █  █
+    0xF0, // ████
+    //
+    // M
+    0x90, // █  █
+    0xF0, // ████
+    0xF0, // ████
+    0x90, // █  █
+    0x90
+]// █  █
 
 
+for (let i = 0; i < IBM_LETTER.length; i++) {
+    RAM[i + 0x22A ] = IBM_LETTER[i]; // Carrega a partir do endereço 0x050
+}
+
+
+console.log(RAM.getUint16(0x22A))
 const root = document.querySelector('#app');
 const nextButton = document.querySelector('#nextButton');
 

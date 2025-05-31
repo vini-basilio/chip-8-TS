@@ -45,7 +45,7 @@ export class Cpu {
 
         this.chip8Screen = chip8Screen;
         this.loadFontSet();
-        this.setRegisterName("PC", 0x200)
+        this.setRegisterName("PC", 0x800)
     }
 
     debug(){
@@ -62,6 +62,7 @@ export class Cpu {
     // sprites
     loadFontSet() {
         const FONT_SET = [
+            0xF0, 0x90, 0xF0, 0x90, 0x90, // A
             0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
             0x20, 0x60, 0x20, 0x20, 0x70, // 1
             0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
@@ -72,7 +73,6 @@ export class Cpu {
             0xF0, 0x10, 0x20, 0x40, 0x40, // 7
             0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
             0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
-            0xF0, 0x90, 0xF0, 0x90, 0x90, // A
             0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
             0xF0, 0x80, 0x80, 0x80, 0xF0, // C
             0xE0, 0x90, 0x90, 0x90, 0xE0, // D
@@ -180,12 +180,12 @@ export class Cpu {
 
                         const xOffset = (registerValueX + col) % 64;
                         const yOffset = (registerValueY + row) % 32;
-
-                        const currentPixel = this.chip8Screen.getPixel(xOffset, yOffset);
+                        console.log(xOffset + " : " + yOffset)
+                        const currentPixel = this.chip8Screen.getPixel(yOffset, xOffset);
 
                         const newPixel = spritePixel ^ currentPixel;
 
-                        this.chip8Screen.setPixel(xOffset, yOffset, newPixel)
+                        this.chip8Screen.setPixel(yOffset, xOffset, newPixel)
 
                         if (currentPixel === 1 && newPixel === 0) {
                             this.setRegisterName("VF", 1);

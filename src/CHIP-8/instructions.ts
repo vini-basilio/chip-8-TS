@@ -4,7 +4,7 @@ export const  INSTRUCTIONS  = {
     MOV_LIT_REG:  0x6,              // XNN -> feito
     ADD_LIT_TO_REGISTER: 0x7,       // XNN -> feito
     SET_INDEX_REGISTER: 0xA,        // NNN -> feito
-    DRAW: 0xD,                      // XYN
+    DRAW: 0xD,                      // XYN -> com bug
     // Pular de forma condicional
 }
 
@@ -22,5 +22,5 @@ export const  INSTRUCTIONS  = {
 
     Todas instrucoes
     https://github.com/trapexit/chip-8_documentation
-
+    https://www.cs.columbia.edu/~sedwards/classes/2016/4840-spring/designs/Chip8.pdf
 */
