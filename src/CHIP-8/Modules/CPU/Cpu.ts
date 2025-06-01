@@ -18,7 +18,8 @@ export class Cpu {
     constructor(
                 registerMemorySpace: typeof CreateMemory,
                 memory: DataView,
-                chip8Screen: ScreenDeviceInterface
+                chip8Screen: ScreenDeviceInterface,
+                ROM_start_address: number
     ) {
         this.registersNames = [
             "V0", "V1", "V2",
@@ -48,8 +49,7 @@ export class Cpu {
 
 
         this.chip8Screen = chip8Screen;
-        this.loadFontSet();
-        this.setRegisterName("PC", 0x800)
+        this.setRegisterName("PC", ROM_start_address)
     }
 
     debug(){
@@ -63,33 +63,18 @@ export class Cpu {
         return registersState;
     }
 
-    // sprites
-    loadFontSet() {
-        const FONT_SET = [
-            0xF0, 0x90, 0xF0, 0x90, 0x90, // A
-            0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
-            0x20, 0x60, 0x20, 0x20, 0x70, // 1
-            0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
-            0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
-            0x90, 0x90, 0xF0, 0x10, 0x10, // 4
-            0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
-            0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
-            0xF0, 0x10, 0x20, 0x40, 0x40, // 7
-            0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
-            0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
-            0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
-            0xF0, 0x80, 0x80, 0x80, 0xF0, // C
-            0xE0, 0x90, 0x90, 0x90, 0xE0, // D
-            0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
-            0xF0, 0x80, 0xF0, 0x80, 0x80  // F
-        ];
-
-        for (let i = 0; i < FONT_SET.length; i++) {
-            this.memory.setUint8(i, FONT_SET[i]);
-        }
+    loadROM(Uint16Buffer: number[]){
+        const startAddress = this.getRegister("PC");
+        Uint16Buffer.forEach( (n: number, index: number) => {
+            this.memory.setUint16((index * 2) + startAddress, n);
+        })
     }
 
-
+    loadBufferInMemory(Uint8Buffer: number[],baseAddress: number){
+        Uint8Buffer.forEach( (n: number, index: number) => {
+                this.memory.setUint8(index + baseAddress, n);
+        })
+    }
     // Manipulacao de registradores
     getRegister(name: string){
         if(!(this.registersNames.includes(name))){
