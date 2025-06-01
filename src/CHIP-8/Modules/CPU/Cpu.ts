@@ -44,7 +44,7 @@ export class Cpu {
             return map
         }, new Map())
 
-        this.stack = new Array();
+        this.stack = [];
         this.memory = memory;
 
 
@@ -55,9 +55,7 @@ export class Cpu {
     debug(){
 
         const registersState = this.registersNames.map(name => {
-            const raw = this.getRegister(name);
-            const hex = raw.toString(16).padStart(2, '0').toUpperCase();
-            return hex
+            return this.getRegister(name).toString(16).padStart(2, '0').toUpperCase();
         })
 
         return registersState;
@@ -83,8 +81,7 @@ export class Cpu {
 
         const index = this.registerMapIndex.get(name)
         if(index != undefined ) {
-            const value = this.registersMemory.getUint16(index)
-            return value
+            return this.registersMemory.getUint16(index)
         }
         throw new Error(`getRegister: Error to get such register '${name}' value`)
     }
@@ -131,8 +128,7 @@ export class Cpu {
     execute(instruction: number){
 
         const decode = (instruction: number) => {
-            const opcode = (instruction & 0xF000) >> 12;
-            return opcode;
+            return (instruction & 0xF000) >> 12;
         }
 
         const opcode = decode(instruction);
