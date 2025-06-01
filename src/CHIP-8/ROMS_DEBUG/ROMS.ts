@@ -1,4 +1,4 @@
-export const IBM_LOGO = [
+export const ROMS = [
     0x00E0,
     0xA22A,
     0x600C,

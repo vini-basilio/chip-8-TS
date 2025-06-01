@@ -41,7 +41,7 @@ export default class CHIP8Screen {
 
     getPixel(rows: number, cols: number){
         const row  = this.pixelsState[rows]
-        console.log(row)
+
         const result  = row[cols]
         return  result;
 

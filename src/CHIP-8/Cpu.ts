@@ -81,7 +81,7 @@ export class Cpu {
         ];
 
         for (let i = 0; i < FONT_SET.length; i++) {
-            this.memory[i] = FONT_SET[i]; // Carrega a partir do endereço 0x050
+            this.memory.setUint8(i, FONT_SET[i]);
         }
     }
 
@@ -100,6 +100,10 @@ export class Cpu {
         throw new Error(`getRegister: Error to get such register '${name}' value`)
     }
 
+    private getRegisterByInstruction(register: number) {
+        return this.registersMemory.getUint16(register * 2);
+    }
+
     setRegisterName(name: string, value: number){
         if(!(this.registersNames.includes(name))){
             throw new Error(`setRegister: No such register '${name}'`)
@@ -109,6 +113,9 @@ export class Cpu {
         throw new Error(`setRegister: Error to set register '${name}' value`)
     }
 
+    private setRegisterByInstruction(register: number, literal: number) {
+        this.registersMemory.setUint16(register * 2, literal)
+    }
     // Buscas
     /*
        Por hora, vou implementar apenas um tipo de busca
@@ -145,15 +152,14 @@ export class Cpu {
             case INSTRUCTIONS.MOV_LIT_REG:{
                 const register = (instruction & 0x0F00) >> 8;
                 const literal =  (instruction & 0x00FF)
-
-                this.registersMemory.setUint16(register * 2, literal)
+                this.setRegisterByInstruction(register, literal);
                 break;
             }
             case INSTRUCTIONS.ADD_LIT_TO_REGISTER:{
                 const register = (instruction & 0x0F00) >> 8;
                 const currentRegisterValue = this.registersMemory.getUint16(register);
                 const literal = (instruction & 0x00FF)
-                this.registersMemory.setUint16(register * 2, literal + currentRegisterValue)
+                this.setRegisterByInstruction(register, literal + currentRegisterValue);
                 break;
             }
             case INSTRUCTIONS.SET_INDEX_REGISTER:{
@@ -162,25 +168,27 @@ export class Cpu {
             }
             case INSTRUCTIONS.DRAW: {
                 const registerX = (instruction & 0x0F00) >> 8;
-                const registerValueX = this.registersMemory.getUint16(registerX * 2);
+                const registerValueX = this.getRegisterByInstruction(registerX);
 
                 const registerY = (instruction & 0x00F0) >> 4;
-                const registerValueY = this.registersMemory.getUint16(registerY * 2);
+                const registerValueY = this.getRegisterByInstruction(registerY);
                 const rows = (instruction & 0x000F); // define o tamanho da linha
 
+                const baseAddress = this.getRegister("I")
 
                 this.setRegisterName("VF", 0);
 
                 // TO-DO retirar esse inner loop como fiz com a tela
                 for(let row = 0; row < rows; row++){
-                    const spriteByte = this.memory[this.getRegister("I") + row]
-                    // 8 bits
+
+                    const spriteByte = this.memory.getUint8(baseAddress + row)
+
                     for(let col = 0; col < 8; col++){
                         const spritePixel = (spriteByte >> (7 - col)) & 1;
 
                         const xOffset = (registerValueX + col) % 64;
                         const yOffset = (registerValueY + row) % 32;
-                        console.log(xOffset + " : " + yOffset)
+
                         const currentPixel = this.chip8Screen.getPixel(yOffset, xOffset);
 
                         const newPixel = spritePixel ^ currentPixel;
@@ -195,6 +203,9 @@ export class Cpu {
             }
         }
     }
+
+
+
     step(){
         const instruction = this.fetch();
         this.execute(instruction);
