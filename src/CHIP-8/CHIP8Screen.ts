@@ -55,27 +55,34 @@ export default class CHIP8Screen {
         if (this.canvas.getContext) {
             const ctx = this.canvas.getContext("2d");
 
-            let columns = 0;
-
             if(ctx){
+                let row = 0;
+                let col = 0;
+
                 ctx.clearRect(0,0, this.canvas.width, this.canvas.height)
-                for(let row = 0; row < this.rows ; row++){
-                    for(let col = 0; col < this.columns; col++) {
-                        ctx.fillStyle = 'transparent';
-                        ctx.shadowColor = 'transparent';
-                        ctx.shadowBlur = 0;
+                for(let index = 0; index < this.rows * this.columns ; index++){
 
-                        if (this.pixelsState[row][col] == 1) {
-                            let x = col * this.squareSide;
-                            let y = row * this.squareSide;
+                    ctx.fillStyle = 'transparent';
+                    ctx.shadowColor = 'transparent';
+                    ctx.shadowBlur = 0;
 
-                            ctx.fillRect(x, y, this.squareSide, this.squareSide);
-                            ctx.fillStyle = '#66FF66';
-                            ctx.shadowColor = '#66FF66';
-                            ctx.shadowBlur = 10;
+                    if (this.pixelsState[row][col] == 1) {
+                        let x = col * this.squareSide;
+                        let y = row * this.squareSide;
 
-                            ctx.fillRect(x, y, this.squareSide, this.squareSide)
-                        }
+                        ctx.fillRect(x, y, this.squareSide, this.squareSide);
+                        ctx.fillStyle = '#66FF66';
+                        ctx.shadowColor = '#66FF66';
+                        ctx.shadowBlur = 10;
+
+                        ctx.fillRect(x, y, this.squareSide, this.squareSide)
+                    }
+
+                    if(col < this.columns - 1) {
+                        col++
+                    } else {
+                        row++;
+                        col = 0;
                     }
                 }
             }
