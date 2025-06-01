@@ -3,7 +3,7 @@ export default class CHIP8Screen {
     columns: number;
     rows: number;
 
-    pixelsState : number[][]
+    vram: number[][]
 
     squareSide: number;
 
@@ -14,7 +14,7 @@ export default class CHIP8Screen {
         this.rows = 32;
 
         // "VRAM"
-        this.pixelsState = this.CreateScreenInitialState(this.rows, this.columns)
+        this.vram = this.CreateScreenInitialState(this.rows, this.columns)
         this.squareSide = 15;
 
         this.canvas = canvas;
@@ -26,6 +26,7 @@ export default class CHIP8Screen {
     CreateScreenInitialState = (rows: number, cols: number): number[][] => {
 
         const state: number[][] = new Array(rows)
+
         for(let i = 0; i < rows; i++){
             state[i] = new Array(cols).fill(0)
         }
@@ -33,11 +34,11 @@ export default class CHIP8Screen {
     }
 
     getPixel(rows: number, cols: number){
-        return  this.pixelsState[rows][cols];
+        return  this.vram[rows][cols];
 
     }
     setPixel(rows: number, cols: number, state: number){
-            this.pixelsState[rows][cols] = state;
+            this.vram[rows][cols] = state;
     }
 
     DrawScreen = () => {
@@ -56,7 +57,7 @@ export default class CHIP8Screen {
                     ctx.shadowColor = 'transparent';
                     ctx.shadowBlur = 0;
 
-                    if (this.pixelsState[row][col] == 1) {
+                    if (this.vram[row][col] == 1) {
                         let x = col * this.squareSide;
                         let y = row * this.squareSide;
 
