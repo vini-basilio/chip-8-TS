@@ -1,9 +1,9 @@
 import {CreateMemory} from "../Memory/CreateMemory";
 import {INSTRUCTIONS} from "./instructions";
-import {ScreenDeviceInterface} from "../../Interfaces/Contracts";
+import {MemoryMapperInterface, ScreenDeviceInterface} from "../../Interfaces/Contracts";
 
 export class Cpu {
-    memory: DataView;
+    memory: MemoryMapperInterface;
     registersNames: string[]
     registersMemory: DataView;
     registerMapIndex: Map<string, number>
@@ -17,7 +17,7 @@ export class Cpu {
 
     constructor(
                 registerMemorySpace: typeof CreateMemory,
-                memory: DataView,
+                memory: MemoryMapperInterface,
                 chip8Screen: ScreenDeviceInterface,
                 ROM_start_address: number
     ) {
