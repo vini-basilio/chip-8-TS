@@ -10,10 +10,6 @@ export default class CHIP8Screen {
     canvas: HTMLCanvasElement;
 
     constructor(canvas: HTMLCanvasElement) {
-
-
-        const BACKGROUND_COLOR = "background-color: #1a1a1a";
-
         this.columns = 64;
         this.rows = 32;
 
@@ -26,9 +22,6 @@ export default class CHIP8Screen {
         this.canvas.height = this.squareSide * this.rows;
         this.canvas.width = this.squareSide * this.columns;
 
-        // @ts-ignore
-        this.canvas.style = BACKGROUND_COLOR;
-
     }
     CreateScreenInitialState = (rows: number, cols: number): number[][] => {
 
@@ -40,10 +33,7 @@ export default class CHIP8Screen {
     }
 
     getPixel(rows: number, cols: number){
-        const row  = this.pixelsState[rows]
-
-        const result  = row[cols]
-        return  result;
+        return  this.pixelsState[rows][cols];
 
     }
     setPixel(rows: number, cols: number, state: number){
