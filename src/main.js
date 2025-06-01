@@ -1,9 +1,9 @@
 import './style.css'
 
-import {CreateMemory} from "./CHIP-8/CreateMemory.js";
-import { Cpu } from "./CHIP-8/Cpu.js";
+import {CreateMemory} from "./CHIP-8/Modules/Memory/CreateMemory.ts";
+import { Cpu } from "./CHIP-8/Modules/CPU/Cpu.ts";
 
-import CHIP8Screen from "./CHIP-8/CHIP8Screen.js";
+import CHIP8Screen from "./CHIP-8/Modules/ScreenDevice/CHIP8Screen.ts";
 import {DRAW_E_CENTER, ROMS, LETTER_E, TEST_SPRITE_PROGRAM} from "./CHIP-8/ROMS_DEBUG/ROMS.ts";
 
 const canvas = document.querySelector('#canvas')

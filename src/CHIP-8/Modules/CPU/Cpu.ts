@@ -1,13 +1,13 @@
-import {CreateMemory} from "./CreateMemory";
+import {CreateMemory} from "../Memory/CreateMemory";
 import {INSTRUCTIONS} from "./instructions";
-import CHIP8Screen from "./CHIP8Screen";
+import {ScreenDeviceInterface} from "../../Interfaces/Contracts";
 
 export class Cpu {
     memory: DataView;
     registersNames: string[]
     registersMemory: DataView;
     registerMapIndex: Map<string, number>
-    chip8Screen: typeof CHIP8Screen;
+    chip8Screen: ScreenDeviceInterface;
     /*
         Na maior parte dos emuladores, pelo que li,
         a stack fica fora da conta da RAM.
@@ -15,7 +15,11 @@ export class Cpu {
     */
     stack: number[]
 
-    constructor(registerMemorySpace: typeof CreateMemory, memory: DataView, chip8Screen: typeof CHIP8Screen) {
+    constructor(
+                registerMemorySpace: typeof CreateMemory,
+                memory: DataView,
+                chip8Screen: ScreenDeviceInterface
+    ) {
         this.registersNames = [
             "V0", "V1", "V2",
             "V3", "V4", "V5",

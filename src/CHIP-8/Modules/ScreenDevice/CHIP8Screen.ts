@@ -1,12 +1,11 @@
-export default class CHIP8Screen {
+import {ScreenDeviceInterface} from "../../Interfaces/Contracts";
+
+export default class CHIP8Screen implements ScreenDeviceInterface{
 
     columns: number;
     rows: number;
-
-    vram: number[][]
-
     squareSide: number;
-
+    vram: number[][]
     canvas: HTMLCanvasElement;
 
     constructor(canvas: HTMLCanvasElement) {
@@ -23,7 +22,7 @@ export default class CHIP8Screen {
         this.canvas.width = this.squareSide * this.columns;
 
     }
-    CreateScreenInitialState = (rows: number, cols: number): number[][] => {
+    private CreateScreenInitialState = (rows: number, cols: number): number[][] => {
 
         const state: number[][] = new Array(rows)
 
@@ -32,16 +31,13 @@ export default class CHIP8Screen {
         }
         return state;
     }
-
     getPixel(rows: number, cols: number){
         return  this.vram[rows][cols];
-
     }
     setPixel(rows: number, cols: number, state: number){
             this.vram[rows][cols] = state;
     }
-
-    DrawScreen = () => {
+    DrawScreen() {
 
         if (this.canvas.getContext) {
             const ctx = this.canvas.getContext("2d");
