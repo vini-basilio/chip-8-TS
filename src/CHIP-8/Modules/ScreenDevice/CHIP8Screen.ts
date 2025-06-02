@@ -31,6 +31,12 @@ export default class CHIP8Screen implements ScreenDeviceInterface{
     setPixel(row: number, col: number, state: number){
         this.vram.setUint8(row * this.columns + col, state)
     }
+    ClearScreen(){
+        for(let index = 0; index < this.rows * this.columns ; index++){
+            this.vram.setUint8(index, 0)
+        }
+        this.DrawScreen();
+    }
     DrawScreen() {
 
         if (this.canvas.getContext) {

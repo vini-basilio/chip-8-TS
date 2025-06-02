@@ -4,6 +4,7 @@ export interface ScreenDeviceInterface {
 
     getPixel(rows: number, cols: number): number
     setPixel(rows: number, cols: number, state: number): void
+    ClearScreen(): void
     DrawScreen(): void
 }
 
