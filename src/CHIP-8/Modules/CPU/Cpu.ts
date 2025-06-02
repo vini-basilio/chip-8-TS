@@ -67,20 +67,14 @@ export class Cpu {
         return [registers,  stackState];
     }
 
-    loadROM(Uint8Buffer: number[]){
+    loadROM(Uint8Buffer: Uint8Array){
         const startAddress = this.getRegister("PC");
 
         Uint8Buffer.forEach( (n: number, index: number) => {
             this.memory.setUint8(index + startAddress, n);
         })
-        console.log("ROdei")
     }
 
-    loadBufferInMemory(Uint8Buffer: number[],baseAddress: number){
-        Uint8Buffer.forEach( (n: number, index: number) => {
-                this.memory.setUint8(index + baseAddress, n);
-        })
-    }
     // Manipulacao de registradores
     private getRegister(name: string){
         if(!(this.registersNames.includes(name))){

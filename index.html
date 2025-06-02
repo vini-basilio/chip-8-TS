@@ -7,6 +7,16 @@
     <title>Vite App</title>
   </head>
   <body>
+    <aside style="
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: baseline;
+    "
+    >
+      <input type="file" id="romLoader" accept=".ch8">
+    </aside>
     <main
     style="
             margin-top: 20px;
@@ -52,8 +62,13 @@
     </div>
     <div>
     </div>
-    <input type="file" id="romLoader" accept=".ch8">
-    <div id="output"></div>
+    <div
+            style="
+                      margin-top: 20px;
+                      width: 400px;
+                      margin: auto;
+              "
+            id="output"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
