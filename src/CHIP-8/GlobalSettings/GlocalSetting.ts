@@ -4,5 +4,6 @@ export const GlobalSettings  = {
         height: 32,
     },
     ramMemory: 4096,
+    vram: 64 * 32 // um byte para da pixel
 }
 
