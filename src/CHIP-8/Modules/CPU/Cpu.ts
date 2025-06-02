@@ -13,7 +13,7 @@ export class Cpu {
         a stack fica fora da conta da RAM.
         Seguirei essa abordagem.
     */
-    stack: number[]
+    stack: DataView
 
     constructor(
                 registerMemorySpace: typeof CreateMemory,
@@ -44,28 +44,36 @@ export class Cpu {
             return map
         }, new Map())
 
-        this.stack = [];
+        this.stack = CreateMemory(16 * 2)
         this.memory = memory;
 
 
         this.chip8Screen = chip8Screen;
         this.setRegisterName("PC", ROM_start_address)
+        this.setRegisterName("SP", this.stack.byteLength - 2)
     }
 
     debug(){
 
-        const registersState = this.registersNames.map(name => {
-            return this.getRegister(name).toString(16).padStart(2, '0').toUpperCase();
+        const registers = this.registersNames.map(name => {
+                const cc = this.getRegister(name);
+            return  `${name}: ${cc.toString(16).padStart(4, '0x').toUpperCase()}`
         })
-
-        return registersState;
+        const stackState = []
+        for(let i = 0; i < this.stack.byteLength; i += 2 ){
+            const cc = this.stack.getUint16(i)
+            stackState.push(cc.toString(16).padStart(4, '0x').toUpperCase());
+        }
+        return [registers,  stackState];
     }
 
-    loadROM(Uint16Buffer: number[]){
+    loadROM(Uint8Buffer: number[]){
         const startAddress = this.getRegister("PC");
-        Uint16Buffer.forEach( (n: number, index: number) => {
-            this.memory.setUint16((index * 2) + startAddress, n);
+
+        Uint8Buffer.forEach( (n: number, index: number) => {
+            this.memory.setUint8(index + startAddress, n);
         })
+        console.log("ROdei")
     }
 
     loadBufferInMemory(Uint8Buffer: number[],baseAddress: number){
@@ -160,8 +168,15 @@ export class Cpu {
                 break;
             }
             case INSTRUCTIONS.JUMP: {
-
                 this.setRegisterName("PC", (instruction & 0x0FFF))
+                break;
+            }
+            case INSTRUCTIONS.CALL_SUB: {
+                const currentStackPointer = this.getRegister("SP")
+                this.stack.setUint16(currentStackPointer, this.getRegister("PC"))
+                this.setRegisterName("SP", currentStackPointer - 2)
+                this.setRegisterName("PC",(instruction & 0x0FFF))
+                break;
             }
             case INSTRUCTIONS.DRAW: {
                 const registerX = (instruction & 0x0F00) >> 8;
@@ -197,6 +212,7 @@ export class Cpu {
                         }
                     }
                 }
+                break;
             }
         }
     }
