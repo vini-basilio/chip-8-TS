@@ -1,4 +1,6 @@
 # CHIP-8 em TS
+![image](https://github.com/user-attachments/assets/a716c5c1-65f3-4efb-a7a4-970618d32355)
+
 Olá, este é meu primeiro projeto de emulação. E tem duas coisas que o fazem especial para mim:
 
 Primeiro, é que é um projeto não guiado; passei os últimos dias apenas pesquisando recursos e pensei em como seria a organização, também olhei projetos similares que já tinham começado e reaproveitei umas soluções. Está sendo muito interessante. 
