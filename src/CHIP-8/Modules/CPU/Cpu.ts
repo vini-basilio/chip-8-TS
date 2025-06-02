@@ -133,6 +133,14 @@ export class Cpu {
 
         const opcode = decode(instruction);
 
+        if(opcode == 0){
+            if(INSTRUCTIONS.CLEAR_SCREEN == (instruction & 0x0FFF)) {
+                this.chip8Screen.ClearScreen();
+                return;
+            }
+        }
+
+
         switch(opcode){
             case INSTRUCTIONS.MOV_LIT_REG:{
                 const register = (instruction & 0x0F00) >> 8;
@@ -150,6 +158,10 @@ export class Cpu {
             case INSTRUCTIONS.SET_INDEX_REGISTER:{
                 this.setRegisterName("I", (instruction & 0x0FFF))
                 break;
+            }
+            case INSTRUCTIONS.JUMP: {
+
+                this.setRegisterName("PC", (instruction & 0x0FFF))
             }
             case INSTRUCTIONS.DRAW: {
                 const registerX = (instruction & 0x0F00) >> 8;
