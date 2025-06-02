@@ -4,13 +4,9 @@ import {CreateMemory} from "./CHIP-8/Modules/Memory/CreateMemory";
 import { Cpu } from "./CHIP-8/Modules/CPU/Cpu";
 import CHIP8Screen from "./CHIP-8/Modules/ScreenDevice/CHIP8Screen";
 
-
 import {FONTS} from "./CHIP-8/AssetsForTests/Assets";
 import {ROMS} from "./CHIP-8/ROMS_DEBUG/ROMS";
 import {GlobalSettings} from "./CHIP-8/GlobalSettings/GlocalSetting";
-import {MemoryMapper} from "./CHIP-8/Modules/Memory/MemoryMapper";
-import {Region} from "./CHIP-8/Interfaces/Contracts";
-
 
 const canvas: HTMLCanvasElement | undefined = document.querySelector('#canvas') as HTMLCanvasElement
 const root = document.querySelector('#app');
@@ -21,25 +17,10 @@ if(
     && root != undefined
     && nextButton != undefined
     ) {
-    const SCREEN = new CHIP8Screen(canvas);
+    const SCREEN = new CHIP8Screen(canvas, GlobalSettings.vram);
+    const RAM = CreateMemory(GlobalSettings.ramMemory )
 
-    const RAM = CreateMemory(GlobalSettings.ramMemory)
-    const MM = new MemoryMapper(RAM);
-
-    const RAM_REGION: Region  = {
-        start: 0x0000,
-        end: 0x0000 + GlobalSettings.ramMemory,
-        remap: true,
-    }
-    MM.map(RAM_REGION)
-    const SCREEN_REGION: Region  = {
-        start: 0x800,
-        end: 0x1000,
-        remap: true,
-    }
-
-    const deleteScreenMemory = MM.map(SCREEN_REGION)
-    const CPU = new Cpu(CreateMemory, MM, SCREEN, 0x600)
+    const CPU = new Cpu(CreateMemory, RAM, SCREEN, 0x600)
 
     CPU.loadBufferInMemory(FONTS.IBM_LETTER, 0x22A)
     CPU.loadROM(ROMS)
