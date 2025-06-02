@@ -1,19 +1,21 @@
 import {ScreenDeviceInterface} from "../../Interfaces/Contracts";
+import {MemoryMapperInterface} from "../../Interfaces/Contracts";
+import { CreateMemory } from "../Memory/CreateMemory";
 
 export default class CHIP8Screen implements ScreenDeviceInterface{
 
     columns: number;
     rows: number;
     squareSide: number;
-    vram: number[][]
+    vram: DataView;
     canvas: HTMLCanvasElement;
 
-    constructor(canvas: HTMLCanvasElement) {
+    constructor(canvas: HTMLCanvasElement, memorySize: number ) {
         this.columns = 64;
         this.rows = 32;
 
         // "VRAM"
-        this.vram = this.CreateScreenInitialState(this.rows, this.columns)
+        this.vram = CreateMemory(memorySize)
         this.squareSide = 15;
 
         this.canvas = canvas;
@@ -22,20 +24,12 @@ export default class CHIP8Screen implements ScreenDeviceInterface{
         this.canvas.width = this.squareSide * this.columns;
 
     }
-    private CreateScreenInitialState = (rows: number, cols: number): number[][] => {
 
-        const state: number[][] = new Array(rows)
-
-        for(let i = 0; i < rows; i++){
-            state[i] = new Array(cols).fill(0)
-        }
-        return state;
+    getPixel(row: number, col: number){
+        return  this.vram.getUint8(row * this.columns + col);
     }
-    getPixel(rows: number, cols: number){
-        return  this.vram[rows][cols];
-    }
-    setPixel(rows: number, cols: number, state: number){
-            this.vram[rows][cols] = state;
+    setPixel(row: number, col: number, state: number){
+        this.vram.setUint8(row * this.columns + col, state)
     }
     DrawScreen() {
 
@@ -49,15 +43,10 @@ export default class CHIP8Screen implements ScreenDeviceInterface{
                 ctx.clearRect(0,0, this.canvas.width, this.canvas.height)
                 for(let index = 0; index < this.rows * this.columns ; index++){
 
-                    ctx.fillStyle = 'transparent';
-                    ctx.shadowColor = 'transparent';
-                    ctx.shadowBlur = 0;
-
-                    if (this.vram[row][col] == 1) {
+                    if (this.vram.getUint8(index) == 1) {
                         let x = col * this.squareSide;
                         let y = row * this.squareSide;
 
-                        ctx.fillRect(x, y, this.squareSide, this.squareSide);
                         ctx.fillStyle = '#66FF66';
                         ctx.shadowColor = '#66FF66';
                         ctx.shadowBlur = 10;
