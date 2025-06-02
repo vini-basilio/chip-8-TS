@@ -1,11 +1,12 @@
 export const  INSTRUCTIONS  = {
-    CLEAR_SCREEN: 0x00E0,
+    CLEAR_SCREEN: 0x00E0,           //     -> feito
     JUMP: 0x1,                      // NNN
     MOV_LIT_REG:  0x6,              // XNN -> feito
     ADD_LIT_TO_REGISTER: 0x7,       // XNN -> feito
     SET_INDEX_REGISTER: 0xA,        // NNN -> feito
     DRAW: 0xD,                      // XYN -> com bug
-    // Pular de forma condicional
+    // Subroutines
+    CALL_SUB: 0x2                   // NNN Pula para uma subrotina
 }
 
 /*

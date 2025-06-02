@@ -8,109 +8,70 @@ import {FONTS} from "./CHIP-8/AssetsForTests/Assets";
 import {ROMS} from "./CHIP-8/ROMS_DEBUG/ROMS";
 import {GlobalSettings} from "./CHIP-8/GlobalSettings/GlocalSetting";
 
+import {RegisterElement} from "./UI/Registers";
+import {StackElement} from "./UI/Stack";
+import {CPUStates} from "./UI/CPUStates";
+
 const canvas: HTMLCanvasElement | undefined = document.querySelector('#canvas') as HTMLCanvasElement
-const root = document.querySelector('#app');
+const stackSection = document.querySelector('#stack');
+const registerSection = document.querySelector('#registers');
 const nextButton = document.querySelector('#nextButton');
+
+
+const SCREEN = new CHIP8Screen(canvas, GlobalSettings.vram);
+const RAM = CreateMemory(GlobalSettings.ramMemory )
+
+const CPU = new Cpu(CreateMemory, RAM, SCREEN, 0x200)
+
+document.getElementById('romLoader').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const rom = new Uint8Array(event.target.result);
+
+        CPU.loadROM(rom)
+        // Mostrar informações do ROM
+        const output = document.getElementById('output');
+        output.innerHTML = `
+                    <h3>ROM Carregado: ${file.name}</h3>
+                    <p>Tamanho: ${rom.length} bytes</p>
+                    <p>Primeiros bytes: ${Array.from(rom.slice(0, 16)).map(b => `0x${b.toString(16).padStart(2, '0')}`).join(' ')}</p>
+                `;
+
+        CPU
+        console.log('ROM pronto para emulação:', rom);
+    };
+
+    reader.readAsArrayBuffer(file);
+});
 
 if(
     canvas != undefined
-    && root != undefined
+    && registerSection != undefined
+    && stackSection != undefined
     && nextButton != undefined
     ) {
-    const SCREEN = new CHIP8Screen(canvas, GlobalSettings.vram);
-    const RAM = CreateMemory(GlobalSettings.ramMemory )
-
-    const CPU = new Cpu(CreateMemory, RAM, SCREEN, 0x600)
-
-    CPU.loadBufferInMemory(FONTS.IBM_LETTER, 0x22A)
-    CPU.loadROM(ROMS)
 
 
-    const state = CPU.debug();
-    root.innerHTML = `
-    <aside>
-      <h3>REGISTERS STATE</h3>
-      <main  style=" display: flex;
-            gap: 20px;
-            justify-items: center;
-            align-content: space-evenly;
-"
-      >
-        <div>
-          <p>V0 : ${state[0]} </p>
-          <p>V1 : ${state[1]} </p>
-          <p>V2 : ${state[2]} </p>
-          <p>V3 : ${state[3]} </p>
-          <p>V4 : ${state[4]} </p>
-          <p>V5 :  ${state[5]} </p>
-          <p>V6 :  ${state[6]} </p>
-          <p>V7 :  ${state[7]} </p>
-          <p>V8 :  ${state[8]} </p>
-          <p>V9 :  ${state[9]} </p>
-        </div>
-        <div>
-          <p>VA :  ${state[10]} </p>
-          <p>VB :  ${state[11]} </p>
-          <p>VC :  ${state[12]} </p>
-          <p>VD :  ${state[13]} </p>
-          <p>VE :  ${state[14]} </p>
-        </div>
-        <div>
-          <p>VF :  ${state[15]} </p>
-          <p>PC :  ${state[16]} </p>
-          <p>I  :  ${state[17]} </p>
-          <p>SP :  ${state[18]} </p>
-        </div>
-      </main>
-    </aside>
-    `
+
+
+
+
+    const [registers, stack] = CPU.debug();
+
+    registerSection.innerHTML = CPUStates("REGISTERS", registers)
+    stackSection.innerHTML = CPUStates("STACK", stack)
 
     nextButton.addEventListener("click", () => {
         CPU.step();
         SCREEN.DrawScreen()
 
-        const state = CPU.debug();
-        root.innerHTML = `
-    <aside>
-      <h3>REGISTERS STATE</h3>
-      <main  style=" display: flex;
-            gap: 20px;
-            justify-items: center;
-            align-content: space-evenly;
-"
-      >
-        <div>
-          <p>V0 : ${state[0]} </p>
-          <p>V1 : ${state[1]} </p>
-          <p>V2 : ${state[2]} </p>
-          <p>V3 : ${state[3]} </p>
-          <p>V4 : ${state[4]} </p>
-          <p>V5 :  ${state[5]} </p>
-          <p>V6 :  ${state[6]} </p>
-          <p>V7 :  ${state[7]} </p>
-          <p>V8 :  ${state[8]} </p>
-          <p>V9 :  ${state[9]} </p>
-        </div>
-        <div>
-          <p>VA :  ${state[10]} </p>
-          <p>VB :  ${state[11]} </p>
-          <p>VC :  ${state[12]} </p>
-          <p>VD :  ${state[13]} </p>
-          <p>VE :  ${state[14]} </p>
-        </div>
-        <div>
-          <p>VF :  ${state[15]} </p>
-          <p>PC :  ${state[16]} </p>
-          <p>I  :  ${state[17]} </p>
-          <p>SP :  ${state[18]} </p>
-        </div>
-      </main>
+        const [registers, stack] = CPU.debug();
 
-    </aside>
-    `
+        registerSection.innerHTML = CPUStates("REGISTERS", registers)
+        stackSection.innerHTML = CPUStates("STACK", stack)
     })
-
-
-
 }
 

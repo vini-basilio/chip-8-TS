@@ -9,22 +9,35 @@
   <body>
     <main
     style="
-            width: 90vw;
+            margin-top: 20px;
             display: flex;
             gap: 20px;
             justify-content: center;
-            align-items: center;
+            align-items: baseline;
     "
     >
-        <canvas id="canvas"
+      <section id="registers"></section>
+      <section style="
+                      margin-top: 20px;
+                      display: flex;
+                      gap: 20px;
+                      flex-direction: column;
+                      justify-content: center;
+                      align-items: center;
+              "
+      >
+        <h1>
+        CHIP-8
+      </h1>
+        <canvas
+                id="canvas"
                 style="background-color: #1a1a1a"
         ></canvas>
-        <div id="app">Hi</div>
-
+      </section>
+      <section id="stack"></section>
     </main>
-    <div
-            style="
-            width: 90vw;
+    <div style="
+            margin-top: 20px;
             display: flex;
             gap: 20px;
             justify-content: center;
@@ -37,6 +50,10 @@
         NEXT STEP
       </button>
     </div>
+    <div>
+    </div>
+    <input type="file" id="romLoader" accept=".ch8">
+    <div id="output"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
