@@ -44,7 +44,7 @@ No momento, é uma classe que cuida de desenhar no elemento Canvas do HTML. Como
 Enquanto escrevo, tenho apenas o conjunto mínimo de instruções para testar o emulador. Sendo assim, ele ainda não é capaz de executar de forma automática. Isso também ajuda a não ler passo-a-passo. Use o botão na tela para ir para a próxima instrução.
 
 ## Sobre a ROM
-A ROM que escreve IBM não foi achada na internet, usei IA generativa para gerar as letras e uma calculadora para escrever o código. Por enquanto, não tenho como fazer um upload de ROM, o que obviamente terá que mudar, mas não antes de implementar todo o conjunto de instruções.
+Pode copiar o arquivo da ROM listado em "Recursos", logo abaixo. Cole os dados num arquivo e salve como .ch8, e pronto. Já pode subir que ele será executado.
 
 ## Recursos
 Segue a lista dos recursos utilizados até o momento:
