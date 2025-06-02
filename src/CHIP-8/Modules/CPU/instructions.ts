@@ -4,9 +4,10 @@ export const  INSTRUCTIONS  = {
     MOV_LIT_REG:  0x6,              // XNN -> feito
     ADD_LIT_TO_REGISTER: 0x7,       // XNN -> feito
     SET_INDEX_REGISTER: 0xA,        // NNN -> feito
-    DRAW: 0xD,                      // XYN -> com bug
+    DRAW: 0xD,                      // XYN -> feito
     // Subroutines
-    CALL_SUB: 0x2                   // NNN Pula para uma subrotina
+    CALL_SUB: 0x2,                   // NNN Pula para uma subrotina -> feito
+    CALL_RET: 0x00EE                 // retorna de uma subrotina
 }
 
 /*

@@ -1,6 +1,6 @@
 import {CreateMemory} from "../Memory/CreateMemory";
 import {INSTRUCTIONS} from "./instructions";
-import {MemoryMapperInterface, ScreenDeviceInterface} from "../../Interfaces/Contracts";
+import {ScreenDeviceInterface} from "../../Interfaces/Contracts";
 
 export class Cpu {
     memory: DataView;
@@ -138,6 +138,13 @@ export class Cpu {
         if(opcode == 0){
             if(INSTRUCTIONS.CLEAR_SCREEN == (instruction & 0x0FFF)) {
                 this.chip8Screen.ClearScreen();
+                return;
+            }
+            if(INSTRUCTIONS.CALL_RET == (instruction & 0x0FFF)){
+                const stackPointer = this.getRegister("SP")
+                const stackPCValue = this.stack.getUint16(stackPointer)
+                this.setRegisterName("PC", stackPCValue)
+                this.setRegisterName("SP", stackPointer + 2)
                 return;
             }
         }
