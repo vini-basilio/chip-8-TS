@@ -3,7 +3,7 @@ import {INSTRUCTIONS} from "./instructions";
 import {MemoryMapperInterface, ScreenDeviceInterface} from "../../Interfaces/Contracts";
 
 export class Cpu {
-    memory: MemoryMapperInterface;
+    memory: DataView;
     registersNames: string[]
     registersMemory: DataView;
     registerMapIndex: Map<string, number>
@@ -17,7 +17,7 @@ export class Cpu {
 
     constructor(
                 registerMemorySpace: typeof CreateMemory,
-                memory: MemoryMapperInterface,
+                memory: DataView,
                 chip8Screen: ScreenDeviceInterface,
                 ROM_start_address: number
     ) {
@@ -74,7 +74,7 @@ export class Cpu {
         })
     }
     // Manipulacao de registradores
-    getRegister(name: string){
+    private getRegister(name: string){
         if(!(this.registersNames.includes(name))){
             throw new Error(`getRegister: No such register '${name}'`)
         }
@@ -90,7 +90,7 @@ export class Cpu {
         return this.registersMemory.getUint16(register * 2);
     }
 
-    setRegisterName(name: string, value: number){
+    private setRegisterName(name: string, value: number){
         if(!(this.registersNames.includes(name))){
             throw new Error(`setRegister: No such register '${name}'`)
         }
@@ -107,7 +107,7 @@ export class Cpu {
        Por hora, vou implementar apenas um tipo de busca
        na RAM. A cada ciclo, quero uma instrucao inteira
    */
-    fetch(){
+    private fetch(){
         const nextInstructionAddress = this.getRegister("PC");
 
         if(nextInstructionAddress != undefined){
@@ -125,7 +125,7 @@ export class Cpu {
     para as opercoes. Seguirei assim e talvez eu mude
     */
 
-    execute(instruction: number){
+    private execute(instruction: number){
 
         const decode = (instruction: number) => {
             return (instruction & 0xF000) >> 12;
@@ -188,7 +188,6 @@ export class Cpu {
             }
         }
     }
-
 
 
     step(){
