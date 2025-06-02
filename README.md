@@ -53,3 +53,4 @@ Segue a lista dos recursos utilizados até o momento:
 - https://www.cs.columbia.edu/~sedwards/classes/2016/4840-spring/designs/Chip8.pdf
 - https://www.youtube.com/@LowByteProductions
 - Apostilas da faculdade
+- ROM do Logo da IBM -> https://callistaenterprise.se/blogg/teknik/2023/01/01/chip8-with-rust-and-go/
