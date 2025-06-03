@@ -1,9 +1,7 @@
-import {ScreenDeviceInterface} from "../../Interfaces/Contracts";
-import {MemoryMapperInterface} from "../../Interfaces/Contracts";
+import {DisplayAbstrat} from "../../Interfaces/Contracts";
 import { CreateMemory } from "../Memory/CreateMemory";
 
-export default class CHIP8Screen implements ScreenDeviceInterface{
-
+export default class Display extends DisplayAbstrat{
     columns: number;
     rows: number;
     squareSide: number;
@@ -11,6 +9,7 @@ export default class CHIP8Screen implements ScreenDeviceInterface{
     canvas: HTMLCanvasElement;
 
     constructor(canvas: HTMLCanvasElement, memorySize: number ) {
+        super(canvas, memorySize);
         this.columns = 64;
         this.rows = 32;
 
@@ -50,8 +49,8 @@ export default class CHIP8Screen implements ScreenDeviceInterface{
                 for(let index = 0; index < this.rows * this.columns ; index++){
 
                     if (this.vram.getUint8(index) == 1) {
-                        let x = col * this.squareSide;
-                        let y = row * this.squareSide;
+                        const x = col * this.squareSide;
+                        const y = row * this.squareSide;
 
                         ctx.fillStyle = '#66FF66';
                         ctx.shadowColor = '#66FF66';
