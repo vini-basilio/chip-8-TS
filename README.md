@@ -44,7 +44,7 @@ No momento, é uma classe que cuida de desenhar no elemento Canvas do HTML. Como
 Enquanto escrevo, tenho apenas o conjunto mínimo de instruções para testar o emulador. Sendo assim, ele ainda não é capaz de executar de forma automática. Isso também ajuda a não ler passo-a-passo. Use o botão na tela para ir para a próxima instrução.
 
 ## Sobre a ROM
-Pode copiar o arquivo da ROM listado em "Recursos", logo abaixo. Cole os dados num arquivo e salve como .ch8, e pronto. Já pode subir que ele será executado.
+Você pode baixar uma cópia dela nos recursos listados abaixo.
 
 ## Recursos
 Segue a lista dos recursos utilizados até o momento:
@@ -53,4 +53,4 @@ Segue a lista dos recursos utilizados até o momento:
 - https://www.cs.columbia.edu/~sedwards/classes/2016/4840-spring/designs/Chip8.pdf
 - https://www.youtube.com/@LowByteProductions
 - Apostilas da faculdade
-- ROM do Logo da IBM -> https://callistaenterprise.se/blogg/teknik/2023/01/01/chip8-with-rust-and-go/
+- ROM do Logo da IBM -> https://callistaenterprise.se/blogg/teknik/2023/01/01/chip8-with-rust-and-go/](https://github.com/loktar00/chip8/blob/master/roms/IBM%20Logo.ch8)
