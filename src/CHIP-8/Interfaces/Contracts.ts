@@ -1,3 +1,5 @@
+import {EmulatorMediator} from "../Modules/EmulatorMediator/EmulatorMediator";
+
 export type CreateMemoryInterface = (sizeBytes: number) => DataView
 
 export abstract class DisplayAbstrat implements DisplayMethods{
@@ -55,6 +57,6 @@ export interface CpuMediatorInterface extends
     RegistersInterface{
     stackState(): string[];
     ZeroFamily(instruction: number): void;
-    BinaryFamily(instruction: number): void;
+    BinaryFamily(instruction: number, display: EmulatorMediator): void;
     BaseFamily(opcode: number, instruction: number): void;
 }

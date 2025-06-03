@@ -24,7 +24,7 @@ export class ControlUnit {
     execute(opcode: number, instruction: number){
         switch (opcode){
             case 0x0: return this.cpuEmulatorMediator.ZeroFamily(instruction)
-            case 0x8: return this.cpuEmulatorMediator.BinaryFamily(instruction)
+            case 0x8: return this.cpuEmulatorMediator.BinaryFamily(instruction, this.emulatorMediator)
             case 0xD: return  IN.Draw(instruction, this.cpuEmulatorMediator, this.emulatorMediator)
             default: return this.cpuEmulatorMediator.BaseFamily(opcode, instruction)
         }
