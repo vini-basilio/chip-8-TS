@@ -135,19 +135,6 @@ export class Cpu {
 
         const opcode = decode(instruction);
 
-        if(opcode == 0){
-            if(INSTRUCTIONS.CLEAR_SCREEN == (instruction & 0x0FFF)) {
-                this.chip8Screen.ClearScreen();
-                return;
-            }
-            if(INSTRUCTIONS.CALL_RET == (instruction & 0x0FFF)){
-                const stackPointer = this.getRegister("SP")
-                const stackPCValue = this.stack.getUint16(stackPointer)
-                this.setRegisterName("PC", stackPCValue)
-                this.setRegisterName("SP", stackPointer + 2)
-                return;
-            }
-        }
 
 
         switch(opcode){
@@ -155,13 +142,6 @@ export class Cpu {
                 const register = (instruction & 0x0F00) >> 8;
                 const literal =  (instruction & 0x00FF)
                 this.setRegisterByInstruction(register, literal);
-                break;
-            }
-            case INSTRUCTIONS.ADD_LIT_TO_REGISTER:{
-                const register = (instruction & 0x0F00) >> 8;
-                const currentRegisterValue = this.registersMemory.getUint16(register);
-                const literal = (instruction & 0x00FF)
-                this.setRegisterByInstruction(register, literal + currentRegisterValue);
                 break;
             }
             case INSTRUCTIONS.SET_INDEX_REGISTER:{
@@ -172,6 +152,49 @@ export class Cpu {
                 this.setRegisterName("PC", (instruction & 0x0FFF))
                 break;
             }
+            // Condicionais
+            case INSTRUCTIONS.EQUALS: {
+                const registerX = (instruction & 0x0F00) >> 8;
+                const currentRegisterX = this.getRegisterByInstruction(registerX);
+                const registerY = (instruction & 0x00F0) >> 4;
+                const currentRegisterY = this.getRegisterByInstruction(registerY);
+                const currentPC = this.getRegister("PC")
+                if(currentRegisterX == currentRegisterY) this.setRegisterName("PC",  currentPC + 2)
+                break;
+            }
+            case INSTRUCTIONS.NOT_EQUALS: {
+                const registerX = (instruction & 0x0F00) >> 8;
+                const currentRegisterX = this.getRegisterByInstruction(registerX);
+                const registerY = (instruction & 0x00F0) >> 4;
+                const currentRegisterY = this.getRegisterByInstruction(registerY);
+                const currentPC = this.getRegister("PC")
+                if(currentRegisterX != currentRegisterY) this.setRegisterName("PC",  currentPC + 2)
+                break;
+            }
+            case INSTRUCTIONS.EQUALS_LIT: {
+                const register = (instruction & 0x0F00) >> 8;
+                const currentRegisterValue = this.getRegisterByInstruction(register);
+                const literalValue = (instruction & 0x00FF);
+                const currentPC = this.getRegister("PC")
+                if(currentRegisterValue == literalValue) this.setRegisterName("PC",  currentPC + 2)
+                break;
+            }
+            case INSTRUCTIONS.NOT_EQUAL_LIT: {
+                const register = (instruction & 0x0F00) >> 8;
+                const currentRegisterValue = this.getRegisterByInstruction(register);
+                const literalValue = (instruction & 0x00FF);
+                const currentPC = this.getRegister("PC")
+                if(currentRegisterValue != literalValue) this.setRegisterName("PC",  currentPC + 2)
+                break;
+            }
+            case INSTRUCTIONS.ADD_LIT_TO_REGISTER:{
+                const register = (instruction & 0x0F00) >> 8;
+                const currentRegisterValue = this.registersMemory.getUint16(register);
+                const literal = (instruction & 0x00FF)
+                const sum = literal + currentRegisterValue
+                this.setRegisterByInstruction(register, (sum & 0xFF));
+                break;
+            }
             case INSTRUCTIONS.CALL_SUB: {
                 const currentStackPointer = this.getRegister("SP")
                 this.stack.setUint16(currentStackPointer, this.getRegister("PC"))
@@ -179,6 +202,7 @@ export class Cpu {
                 this.setRegisterName("PC",(instruction & 0x0FFF))
                 break;
             }
+
             case INSTRUCTIONS.DRAW: {
                 const registerX = (instruction & 0x0F00) >> 8;
                 const registerValueX = this.getRegisterByInstruction(registerX);
@@ -214,6 +238,114 @@ export class Cpu {
                     }
                 }
                 break;
+            }
+        }
+        if(opcode == 0){
+            if(INSTRUCTIONS.CLEAR_SCREEN == (instruction & 0x0FFF)) {
+                this.chip8Screen.ClearScreen();
+                return;
+            }
+            if(INSTRUCTIONS.CALL_RET == (instruction & 0x0FFF)){
+                const stackPointer = this.getRegister("SP")
+                const stackPCValue = this.stack.getUint16(stackPointer)
+                this.setRegisterName("PC", stackPCValue)
+                this.setRegisterName("SP", stackPointer + 2)
+                return;
+            }
+        }
+        if(opcode == 0x8){
+            switch ((instruction & 0x000F)){
+                case 0x0: {
+                    // Carrega no REG X o valor do REG Y
+                    const registerX = (instruction & 0x0F00) >> 8;
+                    const registerY = (instruction & 0x00F0) >> 4;
+                    const registerValueY = this.getRegisterByInstruction(registerY);
+                    this.setRegisterByInstruction(registerX, registerValueY)
+                    break;
+                }
+                case 0x1: {
+                    // Seta o REG X com valor da operacao REG X OR REG Y
+                    // Y nao e afetado
+                    const registerX = (instruction & 0x0F00) >> 8;
+                    const registerValueX = this.getRegisterByInstruction(registerX);
+                    const registerY = (instruction & 0x00F0) >> 4;
+                    const registerValueY = this.getRegisterByInstruction(registerY);
+                    this.setRegisterByInstruction(registerX, (registerValueX | registerValueY))
+                    break;
+                }
+                case 0x2: {
+                    // Seta o REG X com o valor da operacao REG X AND REG Y
+                    // Y nao e afetado
+                    const registerX = (instruction & 0x0F00) >> 8;
+                    const registerValueX = this.getRegisterByInstruction(registerX);
+                    const registerY = (instruction & 0x00F0) >> 4;
+                    const registerValueY = this.getRegisterByInstruction(registerY);
+                    this.setRegisterByInstruction(registerX, (registerValueX & registerValueY))
+                    break;
+                }
+                case 0x3: {
+                    // Seta o REG X com o valor da operacao REG X XOR REG Y
+                    // Y nao e afetado
+                    const registerX = (instruction & 0x0F00) >> 8;
+                    const registerValueX = this.getRegisterByInstruction(registerX);
+                    const registerY = (instruction & 0x00F0) >> 4;
+                    const registerValueY = this.getRegisterByInstruction(registerY);
+                    this.setRegisterByInstruction(registerX, (registerValueX ^ registerValueY))
+                    break;
+                }
+                case 0x4: {
+                    // Adiciona ao REG X o valor REG X SUM REG Y
+                    // Diferente de 0x7, flag deve ser atualizado com overflow ou nao
+                    const registerX = (instruction & 0x0F00) >> 8;
+                    const registerValueX = this.getRegisterByInstruction(registerX);
+                    const registerY = (instruction & 0x00F0) >> 4;
+                    const registerValueY = this.getRegisterByInstruction(registerY);
+
+                    const sum = registerValueX + registerValueY;
+                    const overflow = sum > 255 ? 1 : 0;
+                    this.setRegisterName("VF", overflow)
+                    this.setRegisterByInstruction(registerX, (sum & 0xFF))
+
+                    break;
+                }
+                case 0x5: {
+                    // Adiciona ao REG X o valor REG X - REG Y
+
+                    const registerX = (instruction & 0x0F00) >> 8;
+                    const registerValueX = this.getRegisterByInstruction(registerX);
+                    const registerY = (instruction & 0x00F0) >> 4;
+                    const registerValueY = this.getRegisterByInstruction(registerY);
+
+                    const diff = registerValueX - registerValueY;
+
+                    this.setRegisterByInstruction(registerX, diff)
+
+                    break;
+                }
+                case 0x7: {
+                    // Adiciona ao REG X o valor REG X + REG Y
+
+                    const registerX = (instruction & 0x0F00) >> 8;
+                    const registerValueX = this.getRegisterByInstruction(registerX);
+                    const registerY = (instruction & 0x00F0) >> 4;
+                    const registerValueY = this.getRegisterByInstruction(registerY);
+
+                    const diff = registerValueY - registerValueX;
+
+                    this.setRegisterByInstruction(registerX, diff)
+
+                    break;
+                }
+                case 0x6: {
+                    throw new Error("No implemented 8XY6")
+
+                    break;
+                }
+                case 0xE: {
+                    throw new Error("No implemented 8XYE")
+
+                    break;
+                }
             }
         }
     }

@@ -1,13 +1,20 @@
 export const  INSTRUCTIONS  = {
-    CLEAR_SCREEN: 0x00E0,           //     -> feito
-    JUMP: 0x1,                      // NNN
-    MOV_LIT_REG:  0x6,              // XNN -> feito
-    ADD_LIT_TO_REGISTER: 0x7,       // XNN -> feito
-    SET_INDEX_REGISTER: 0xA,        // NNN -> feito
-    DRAW: 0xD,                      // XYN -> feito
+    JUMP: 0x1,                      // NNN                              -> feito
+    // Tela
+    CLEAR_SCREEN: 0x00E0,           //                                  -> feito
+    DRAW: 0xD,                      // XYN                              -> feito
+    MOV_LIT_REG:  0x6,              // XNN                              -> feito
+    ADD_LIT_TO_REGISTER: 0x7,       // XNN                              -> feito
+    SET_INDEX_REGISTER: 0xA,        // NNN                              -> feito
     // Subroutines
-    CALL_SUB: 0x2,                   // NNN Pula para uma subrotina -> feito
-    CALL_RET: 0x00EE                 // retorna de uma subrotina
+    CALL_SUB: 0x2,                   // NNN Pula para uma subrotina     -> feito
+    CALL_RET: 0x00EE,                // retorna de uma subrotina        -> feito
+    // JUMPS condicionais
+    // Pulam dois bytes. Ou seja, sao blocos de IF
+    EQUALS: 0x5,                     // XY0 onde X e igual a Y          -> feito
+    NOT_EQUALS: 0x9,                 // XY0 onde X nao e igual a Y      -> feito
+    EQUALS_LIT: 0x3,                 // XNN onde X e igual a NN         -> feito
+    NOT_EQUAL_LIT: 0x4,              // XNN onde X nao e igual a NN     -> feito
 }
 
 /*
