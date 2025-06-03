@@ -152,6 +152,19 @@ export class Cpu {
                 this.setRegisterName("PC", (instruction & 0x0FFF))
                 break;
             }
+            case INSTRUCTIONS.JUMP_OFFSET: {
+                const base = this.getRegister("V0")
+                this.setRegisterName("PC", base + (instruction & 0x0FFF))
+                break;
+            }
+            case INSTRUCTIONS.RANDOM: {
+                const register = (instruction & 0x0F00) >> 8;
+                const literal =  (instruction & 0x00FF)
+                const randomNum = Math.floor(Math.random() * 256)
+                const result = randomNum & literal
+                this.setRegisterByInstruction(register, result)
+                break
+            }
             // Condicionais
             case INSTRUCTIONS.EQUALS: {
                 const registerX = (instruction & 0x0F00) >> 8;
@@ -202,7 +215,6 @@ export class Cpu {
                 this.setRegisterName("PC",(instruction & 0x0FFF))
                 break;
             }
-
             case INSTRUCTIONS.DRAW: {
                 const registerX = (instruction & 0x0F00) >> 8;
                 const registerValueX = this.getRegisterByInstruction(registerX);
@@ -337,12 +349,24 @@ export class Cpu {
                     break;
                 }
                 case 0x6: {
-                    throw new Error("No implemented 8XY6")
+
+                    const registerX = (instruction & 0x0F00) >> 8;
+                    const registerY = (instruction & 0x00F0) >> 4;
+                    const registerValueY = this.getRegisterByInstruction(registerY);
+                    this.setRegisterName("VF", (registerValueY & 0x1))
+                    const result = registerValueY >> 1
+                    this.setRegisterByInstruction(registerX, result)
 
                     break;
                 }
                 case 0xE: {
-                    throw new Error("No implemented 8XYE")
+
+                    const registerX = (instruction & 0x0F00) >> 8;
+                    const registerY = (instruction & 0x00F0) >> 4;
+                    const registerValueY = this.getRegisterByInstruction(registerY);
+                    this.setRegisterName("VF", (registerValueY & 0x80) >> 7)
+                    const result = registerValueY << 1
+                    this.setRegisterByInstruction(registerX, result)
 
                     break;
                 }

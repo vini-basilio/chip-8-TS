@@ -1,8 +1,11 @@
 export const  INSTRUCTIONS  = {
     JUMP: 0x1,                      // NNN                              -> feito
+    JUMP_OFFSET: 0xB,               // NNN                              -> feito
     // Tela
     CLEAR_SCREEN: 0x00E0,           //                                  -> feito
     DRAW: 0xD,                      // XYN                              -> feito
+    // Geral
+    RANDOM: 0xC,                    // XNN                              ->
     MOV_LIT_REG:  0x6,              // XNN                              -> feito
     ADD_LIT_TO_REGISTER: 0x7,       // XNN                              -> feito
     SET_INDEX_REGISTER: 0xA,        // NNN                              -> feito
