@@ -1,13 +1,12 @@
 import {CreateMemory} from "../Memory/CreateMemory";
-import {INSTRUCTIONS} from "./instructions";
-import {ScreenDeviceInterface} from "../../Interfaces/Contracts";
+import {INSTRUCTIONS} from "./Instructions/instructions";
+import { EmulatorMediatorInterface} from "../../Interfaces/Contracts";
 
 export class Cpu {
-    memory: DataView;
     registersNames: string[]
     registersMemory: DataView;
     registerMapIndex: Map<string, number>
-    chip8Screen: ScreenDeviceInterface;
+    emulatorMediator: EmulatorMediatorInterface;
     /*
         Na maior parte dos emuladores, pelo que li,
         a stack fica fora da conta da RAM.
@@ -17,9 +16,7 @@ export class Cpu {
 
     constructor(
                 registerMemorySpace: typeof CreateMemory,
-                memory: DataView,
-                chip8Screen: ScreenDeviceInterface,
-                ROM_start_address: number
+                emulatorMediator: EmulatorMediatorInterface,
     ) {
         this.registersNames = [
             "V0", "V1", "V2",
@@ -45,12 +42,10 @@ export class Cpu {
         }, new Map())
 
         this.stack = CreateMemory(16 * 2)
-        this.memory = memory;
 
-
-        this.chip8Screen = chip8Screen;
-        this.setRegisterName("PC", ROM_start_address)
-        this.setRegisterName("SP", this.stack.byteLength - 2)
+        this.emulatorMediator = emulatorMediator;
+        this.setRegisterName("PC", 0x200)
+        this.setRegisterName("SP", this.stack.byteLength - 2);
     }
 
     debug(){
@@ -67,13 +62,6 @@ export class Cpu {
         return [registers,  stackState];
     }
 
-    loadROM(Uint8Buffer: Uint8Array){
-        const startAddress = this.getRegister("PC");
-
-        Uint8Buffer.forEach( (n: number, index: number) => {
-            this.memory.setUint8(index + startAddress, n);
-        })
-    }
 
     // Manipulacao de registradores
     private getRegister(name: string){
@@ -114,7 +102,7 @@ export class Cpu {
 
         if(nextInstructionAddress != undefined){
 
-            const instruction = this.memory.getUint16(nextInstructionAddress);
+            const instruction = this.emulatorMediator.getUint16(nextInstructionAddress);
 
             this.setRegisterName("PC", nextInstructionAddress + 2)
             return instruction;
@@ -230,7 +218,7 @@ export class Cpu {
                 // TO-DO retirar esse inner loop como fiz com a tela
                 for(let row = 0; row < rows; row++){
 
-                    const spriteByte = this.memory.getUint8(baseAddress + row)
+                    const spriteByte = this.emulatorMediator.getUint8(baseAddress + row)
 
                     for(let col = 0; col < 8; col++){
                         const spritePixel = (spriteByte >> (7 - col)) & 1;
@@ -238,11 +226,11 @@ export class Cpu {
                         const xOffset = (registerValueX + col) % 64;
                         const yOffset = (registerValueY + row) % 32;
 
-                        const currentPixel = this.chip8Screen.getPixel(yOffset, xOffset);
+                        const currentPixel = this.emulatorMediator.getPixel(yOffset, xOffset);
 
                         const newPixel = spritePixel ^ currentPixel;
 
-                        this.chip8Screen.setPixel(yOffset, xOffset, newPixel)
+                        this.emulatorMediator.setPixel(yOffset, xOffset, newPixel)
 
                         if (currentPixel === 1 && newPixel === 0) {
                             this.setRegisterName("VF", 1);
@@ -254,7 +242,7 @@ export class Cpu {
         }
         if(opcode == 0){
             if(INSTRUCTIONS.CLEAR_SCREEN == (instruction & 0x0FFF)) {
-                this.chip8Screen.ClearScreen();
+                this.emulatorMediator.ClearScreen();
                 return;
             }
             if(INSTRUCTIONS.CALL_RET == (instruction & 0x0FFF)){

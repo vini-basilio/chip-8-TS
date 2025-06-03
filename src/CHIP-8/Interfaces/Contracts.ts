@@ -1,31 +1,60 @@
 export type CreateMemoryInterface = (sizeBytes: number) => DataView
 
-export interface ScreenDeviceInterface {
+export abstract class DisplayAbstrat implements DisplayMethods{
+    protected canvas!: HTMLCanvasElement;
+    protected memorySize!: number;
 
-    getPixel(rows: number, cols: number): number
-    setPixel(rows: number, cols: number, state: number): void
-    ClearScreen(): void
-    DrawScreen(): void
+    constructor(canvas: HTMLCanvasElement, memorySize: number) {
+        this.canvas = canvas;
+        this.memorySize = memorySize;
+    }
+    abstract getPixel(rows: number, cols: number): number
+    abstract setPixel(rows: number, cols: number, state: number): void
+    abstract ClearScreen(): void
+    abstract DrawScreen(): void
 }
 
-export interface MemoryMapperInterface  {
-    regions: Region[];
-    memory: DataView;
+export interface DisplayMethods{
 
-    map(
-        device: any,
-        start: number,
-        end: number,
-        remap: boolean
-    ): void
-    getUint8(address: number): number
-    getUint16(address: number): number
-    setUint8(address: number, value: number): void
-    setUint16(address: number, value: number): void
+     getPixel(rows: number, cols: number): number
+     setPixel(rows: number, cols: number, state: number): void
+     ClearScreen(): void
+     DrawScreen(): void
 }
-export type Region = {
-    device: any;
-    start: number;
-    end: number;
-    remap: boolean;
+
+export interface MemoryInsterface {
+    getUint8(bytes: number): number;
+    setUint8(bytes: number, value: number): void;
+    getUint16(bytes: number): number;
+    setUint16(bytes: number, value: number): void;
+}
+
+export interface EmulatorMediatorInterface extends
+    RomLoaderInterface,
+    DisplayMethods,
+    MemoryInsterface {}
+
+export interface RomLoaderInterface {
+    LoaderListener(
+        input: HTMLElement,
+        output: HTMLElement,
+        loadRom: (arr: Uint8Array) => void): void;
+}
+export interface StackInterface extends MemoryInsterface {
+    stackState(): string[];
+}
+export interface RegistersInterface {
+    registerState(): string[];
+    getRegister(name: string): number;
+    getRegisterByInstruction(register: number): number;
+    setRegisterName(name: string, value: number): void;
+    setRegisterByInstruction(register: number, literal: number): void;
+}
+
+export interface CpuMediatorInterface extends
+    RegistersInterface{
+    stackState(): string[];
+    ZeroFamily(instruction: number): void;
+    BinaryFamily(instruction: number): void;
+    BaseFamily(opcode: number, instruction: number): void;
 }
