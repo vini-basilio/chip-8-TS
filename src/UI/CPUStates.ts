@@ -1,5 +1,5 @@
 export const CPUStates = (title: string, state: string[]) => {
-    const elements = state.map(n=>  `<tr><td>${n}</td></tr>`).join("")
+    const elements = state.map(n => `<tr><td>${n}</td></tr>`).join("")
     return `
     <aside>
       <main style=

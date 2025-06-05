@@ -57,7 +57,6 @@ export class CpuMediator implements CpuMediatorInterface {
     handleInterrupt = (
         key: number,
         state: number,
-        lastKeyState: boolean
     ) => {
         this.keyboardState[key] = state
     };

@@ -1,23 +1,116 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+    margin: 0px;
+    padding: 0px;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #000000;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    --border-color: #1a561a;
+
+}
+
+.boxBorder {
+    border: 1px solid var(--border-color);
 }
 
 
-table {
-width: 100%;
-border-collapse: collapse;
+.emulatorMain {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
 }
-table, td, th {
-  border: 1px solid;
+
+.emulatorScreenSection {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.romInput {
+    display: flex;
+    justify-content: end;
+}
+
+.rom-loader-label {
+    display: inline-block;
+    padding: 10px 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+input {
+    display: none;
+}
+
+.insert-rom-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.output {
+    width: 600px;
+}
+
+canvas {
+    background: transparent;
+}
+
+.emulatorAside {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+    height: 500px;
+    /*padding: 20px;*/
+}
+
+.layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    gap: 1em;
+    padding: 20px;
+}
+
+
+.settings {
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    grid-column: 2;
+}
+
+/* Grid */
+.keyboard-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 50px);
+}
+
+.keyboard-button {
+    text-align: center;
+    font-size: 1.5em;
+    text-transform: uppercase;
 }

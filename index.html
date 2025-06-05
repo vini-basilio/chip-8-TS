@@ -1,74 +1,71 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <link href="/vite.svg" rel="icon" type="image/svg+xml"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Vite App</title>
-  </head>
-  <body>
-    <aside style="
-            margin-top: 20px;
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            align-items: baseline;
-    "
-    >
-      <input type="file" id="romLoader" accept=".ch8">
-    </aside>
-    <main
-    style="
-            margin-top: 20px;
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            align-items: baseline;
-    "
-    >
-      <section id="registers"></section>
-      <section style="
-                      margin-top: 20px;
-                      display: flex;
-                      gap: 20px;
-                      flex-direction: column;
-                      justify-content: center;
-                      align-items: center;
-              "
-      >
-        <h1>
-        CHIP-8
-      </h1>
-        <canvas
-                id="canvas"
-                style="background-color: #1a1a1a"
-        ></canvas>
-      </section>
-      <section id="stack"></section>
+</head>
+<body>
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <main class="emulatorMain">
+        <section class="emulatorScreenSection">
+            <h1> CHIP-8 </h1>
+            <canvas class="boxBorder" id="canvas"></canvas>
+        </section>
     </main>
-    <div style="
-            margin-top: 20px;
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            align-items: center;
-    "
-    >
-      <button
-        id="nextButton"
-      >
-        NEXT STEP
-      </button>
-    </div>
-    <div>
-    </div>
-    <div
-            style="
-                      margin-top: 20px;
-                      width: 400px;
-                      margin: auto;
-              "
-            id="output"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+    <aside style="width: 800px">
+        <div class="insert-rom-container">
+            <div id="output">
+                <h3>ROM LOADED</h3>
+                <p>size:</p>
+            </div>
+            <div class="romInput boxBorder">
+                <label class="rom-loader-label" for="romLoader">INSERT ROM</label>
+                <input accept=".ch8" id="romLoader" type="file">
+            </div>
+        </div>
+        <div>
+            <div class="emulatorAside">
+                <div class="layout boxBorder">
+                    <div style="width: 200px;">
+                        <section class="keyboard-container">
+                            <div class="keyboard-button">1</div>
+                            <div class="keyboard-button">2</div>
+                            <div class="keyboard-button">3</div>
+                            <div class="keyboard-button">4</div>
+                            <div class="keyboard-button">q</div>
+                            <div class="keyboard-button">w</div>
+                            <div class="keyboard-button">e</div>
+                            <div class="keyboard-button">r</div>
+                            <div class="keyboard-button">a</div>
+                            <div class="keyboard-button">s</div>
+                            <div class="keyboard-button">d</div>
+                            <div class="keyboard-button">f</div>
+                            <div class="keyboard-button">z</div>
+                            <div class="keyboard-button">x</div>
+                            <div class="keyboard-button">c</div>
+                            <div class="keyboard-button">v</div>
+                        </section>
+                    </div>
+                    <div style="width: 200px">
+                        <h3 style="text-align: center">Layout do teclado</h3>
+                        <p style="text-align: justify">
+                            A escolha foi seguir os teclado modernos, como em outras
+                            implentações
+                        </p>
+                    </div>
+                </div>
+                <div class="settings">
+                    <div>
+                        <h3>configurações</h3>
+                        <h4>ainda não implementado</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>
+<script src="/src/main.ts" type="module"></script>
+</body>
 </html>
