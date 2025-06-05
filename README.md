@@ -1,5 +1,5 @@
 # CHIP-8 em TS
-[![image](https://github.com/user-attachments/assets/a716c5c1-65f3-4efb-a7a4-970618d32355)](https://github.com/vini-basilio/chip-8-TS)
+![image](https://github.com/user-attachments/assets/42148870-5bc0-4773-ac92-ed14af3a598f)
 
 Olá, este é meu primeiro projeto de emulação. E tem duas coisas que o fazem especial para mim:
 
