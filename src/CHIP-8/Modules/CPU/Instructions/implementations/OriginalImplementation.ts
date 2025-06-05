@@ -1,5 +1,5 @@
-import {MemoryInsterface, RegistersInterface, StackInterface} from "../../../Interfaces/Contracts";
-import {EmulatorMediator} from "../../EmulatorMediator/EmulatorMediator";
+import {MemoryInsterface, RegistersInterface, StackInterface} from "../../../../Interfaces/Contracts";
+import {EmulatorMediator} from "../../../EmulatorMediator/EmulatorMediator";
 
 export const Draw = (instruction: number, registers: RegistersInterface, emulatorMediator: EmulatorMediator) => {
     const registerX = (instruction & 0x0F00) >> 8;
@@ -14,11 +14,11 @@ export const Draw = (instruction: number, registers: RegistersInterface, emulato
     registers.setRegisterName("VF", 0);
 
     // TO-DO retirar esse inner loop como fiz com a tela
-    for(let row = 0; row < rows; row++){
+    for (let row = 0; row < rows; row++) {
 
         const spriteByte = emulatorMediator.getUint8(baseAddress + row)
 
-        for(let col = 0; col < 8; col++){
+        for (let col = 0; col < 8; col++) {
             const spritePixel = (spriteByte >> (7 - col)) & 1;
 
             const xOffset = (registerValueX + col) % 64;
@@ -36,16 +36,14 @@ export const Draw = (instruction: number, registers: RegistersInterface, emulato
     }
 }
 
-export const CallSub  = (instruction: number, registers: RegistersInterface, stack: MemoryInsterface) =>
-{
+export const CallSub = (instruction: number, registers: RegistersInterface, stack: MemoryInsterface) => {
     const currentStackPointer = registers.getRegister("SP")
     stack.setUint16(currentStackPointer, registers.getRegister("PC"))
     registers.setRegisterName("SP", currentStackPointer - 2)
-    registers.setRegisterName("PC",(instruction & 0x0FFF))
+    registers.setRegisterName("PC", (instruction & 0x0FFF))
 }
 
-export const AddLitToRegister  = (instruction: number, registers: RegistersInterface) =>
-{
+export const AddLitToRegister = (instruction: number, registers: RegistersInterface) => {
     const register = (instruction & 0x0F00) >> 8;
     const currentRegisterValue = registers.getRegisterByInstruction(register);
     const literal = (instruction & 0x00FF)
@@ -53,67 +51,60 @@ export const AddLitToRegister  = (instruction: number, registers: RegistersInter
     registers.setRegisterByInstruction(register, (sum & 0xFF));
 }
 
-export const NotEqualsLit  = (instruction: number, registers: RegistersInterface) =>
-{
+export const NotEqualsLit = (instruction: number, registers: RegistersInterface) => {
     const register = (instruction & 0x0F00) >> 8;
     const currentRegisterValue = registers.getRegisterByInstruction(register);
     const literalValue = (instruction & 0x00FF);
     const currentPC = registers.getRegister("PC")
-    if(currentRegisterValue != literalValue) registers.setRegisterName("PC",  currentPC + 2)
+    if (currentRegisterValue != literalValue) registers.setRegisterName("PC", currentPC + 2)
 }
 
-export const EqualsLit  = (instruction: number, registers: RegistersInterface) =>
-{
+export const EqualsLit = (instruction: number, registers: RegistersInterface) => {
     const register = (instruction & 0x0F00) >> 8;
     const currentRegisterValue = registers.getRegisterByInstruction(register);
     const literalValue = (instruction & 0x00FF);
     const currentPC = registers.getRegister("PC")
-    if(currentRegisterValue == literalValue) registers.setRegisterName("PC",  currentPC + 2)
+    if (currentRegisterValue == literalValue) registers.setRegisterName("PC", currentPC + 2)
 }
 
-export const NotEquals  = (instruction: number, registers: RegistersInterface) =>
-{
+export const NotEquals = (instruction: number, registers: RegistersInterface) => {
     const registerX = (instruction & 0x0F00) >> 8;
     const currentRegisterX = registers.getRegisterByInstruction(registerX);
     const registerY = (instruction & 0x00F0) >> 4;
     const currentRegisterY = registers.getRegisterByInstruction(registerY);
     const currentPC = registers.getRegister("PC")
-    if(currentRegisterX != currentRegisterY) registers.setRegisterName("PC",  currentPC + 2)
+    if (currentRegisterX != currentRegisterY) registers.setRegisterName("PC", currentPC + 2)
 }
 
-export const Equals  = (instruction: number, registers: RegistersInterface) =>
-{
+export const Equals = (instruction: number, registers: RegistersInterface) => {
     const registerX = (instruction & 0x0F00) >> 8;
     const currentRegisterX = registers.getRegisterByInstruction(registerX);
     const registerY = (instruction & 0x00F0) >> 4;
     const currentRegisterY = registers.getRegisterByInstruction(registerY);
     const currentPC = registers.getRegister("PC")
-    if(currentRegisterX == currentRegisterY) registers.setRegisterName("PC",  currentPC + 2)
+    if (currentRegisterX == currentRegisterY) registers.setRegisterName("PC", currentPC + 2)
 }
 
-export const MovLitReg  = (instruction: number,  registers: RegistersInterface) =>
-{
+export const MovLitReg = (instruction: number, registers: RegistersInterface) => {
     console.log("MOV_LIT_REG")
     const register = (instruction & 0x0F00) >> 8;
-    const literal =  (instruction & 0x00FF)
+    const literal = (instruction & 0x00FF)
     registers.setRegisterByInstruction(register, literal)
 }
-export const JumpOffset  = (instruction: number, registers: RegistersInterface) =>
-{
+export const JumpOffset = (instruction: number, registers: RegistersInterface) => {
     const base = registers.getRegister("V0")
     registers.setRegisterName("PC", base + (instruction & 0x0FFF))
 }
 
-export const Random  = (instruction: number, registers: RegistersInterface) =>
-{
+export const Random = (instruction: number, registers: RegistersInterface) => {
     const register = (instruction & 0x0F00) >> 8;
-    const literal =  (instruction & 0x00FF)
+    const literal = (instruction & 0x00FF)
     const randomNum = Math.floor(Math.random() * 256)
     const result = randomNum & literal
     registers.setRegisterByInstruction(register, result)
 }
 
-export const CallRet = (registers: RegistersInterface, stack: StackInterface)=> {
+export const CallRet = (registers: RegistersInterface, stack: StackInterface) => {
     const stackPointer = registers.getRegister("SP")
     const stackPCValue = stack.getUint16(stackPointer)
     registers.setRegisterName("PC", stackPCValue)
@@ -195,7 +186,7 @@ export const RegYMinusRegX = (instruction: number, registers: RegistersInterface
     registers.setRegisterByInstruction(registerX, diff)
 }
 
-export const ShiftRight =  (instruction: number, registers: RegistersInterface) => {
+export const ShiftRight = (instruction: number, registers: RegistersInterface) => {
     const registerX = (instruction & 0x0F00) >> 8;
     const registerY = (instruction & 0x00F0) >> 4;
     const registerValueY = registers.getRegisterByInstruction(registerY);
@@ -203,7 +194,7 @@ export const ShiftRight =  (instruction: number, registers: RegistersInterface) 
     const result = registerValueY >> 1
     registers.setRegisterByInstruction(registerX, result)
 }
-export const ShiftLeft =  (instruction: number, registers: RegistersInterface) => {
+export const ShiftLeft = (instruction: number, registers: RegistersInterface) => {
     const registerX = (instruction & 0x0F00) >> 8;
     const registerY = (instruction & 0x00F0) >> 4;
     const registerValueY = registers.getRegisterByInstruction(registerY);
@@ -211,3 +202,121 @@ export const ShiftLeft =  (instruction: number, registers: RegistersInterface) =
     const result = registerValueY << 1
     registers.setRegisterByInstruction(registerX, result)
 }
+
+export const IsKeyRegPressing = (
+    instruction: number,
+    registers: RegistersInterface,
+    keyboardState: number[]
+) => {
+    const registerX = (instruction & 0x0F00) >> 8;
+    const registerValueX = registers.getRegisterByInstruction(registerX);
+    const nextInstructionAddress = registers.getRegister("PC");
+    if (keyboardState[registerValueX]) registers.setRegisterName("PC", nextInstructionAddress + 2)
+}
+
+export const IsKeyRegNotPressing = (
+    instruction: number,
+    registers: RegistersInterface,
+    keyboardState: number[]
+) => {
+    const registerX = (instruction & 0x0F00) >> 8;
+    const registerValueX = registers.getRegisterByInstruction(registerX);
+    const nextInstructionAddress = registers.getRegister("PC");
+    if (keyboardState[registerValueX]) registers.setRegisterName("PC", nextInstructionAddress + 2)
+}
+
+export const SetRegDelay = (
+    instruction: number,
+    registers: RegistersInterface,
+    delayTimer: number,
+) => {
+    const registerX = (instruction & 0x0F00) >> 8;
+    registers.setRegisterByInstruction(registerX, delayTimer);
+}
+export const SetDelayReg = (
+    instruction: number,
+    registers: RegistersInterface,
+    delayTimer: Function,
+) => {
+    const registerX = (instruction & 0x0F00) >> 8;
+    const registerValueX = registers.getRegisterByInstruction(registerX);
+    delayTimer(registerValueX)
+}
+
+export const AddIndex = (
+    instruction: number,
+    registers: RegistersInterface,
+) => {
+    const registerX = (instruction & 0x0F00) >> 8;
+    const registerValueX = registers.getRegisterByInstruction(registerX);
+    const currentValueI = registers.getRegister("I");
+    const sum = currentValueI + registerValueX
+    const overflow = sum > 255 ? 1 : 0;
+    registers.setRegisterName("VF", overflow)
+    registers.setRegisterName("I", (sum & 0xFF))
+}
+
+export const GetKey = (
+    instruction: number,
+    registers: RegistersInterface,
+    keyboardState: number[],
+) => {
+    for (let i = 0; i < keyboardState.length; i++) {
+        if (keyboardState[i] == 1) {
+            const registerX = (instruction & 0x0F00) >> 8;
+            registers.setRegisterByInstruction(registerX, i)
+            return
+        }
+    }
+
+    registers.setRegisterName("PC", registers.getRegister("PC") - 2)
+}
+
+export const FontCharacter = (
+    instruction: number,
+    registers: RegistersInterface,
+) => {
+    const registerX = (instruction & 0x0F00) >> 8;
+    registers.setRegisterName("I", registers.getRegisterByInstruction(registerX) * 5)
+}
+
+export const BinaryToDecimal = (
+    instruction: number,
+    registers: RegistersInterface,
+    emulatorMediator: EmulatorMediator
+) => {
+    const registerX = (instruction & 0x0F00) >> 8;
+    let index = registers.getRegister("I")
+
+    emulatorMediator.setUint8(index++, Math.floor(registerX / 100))
+    emulatorMediator.setUint8(index++, Math.floor((registerX % 100) / 10))
+    emulatorMediator.setUint8(index, registerX % 10)
+}
+
+export const Store = (
+    instruction: number,
+    registers: RegistersInterface,
+    emulatorMediator: EmulatorMediator
+) => {
+    const registerX = (instruction & 0x0F00) >> 8;
+    let index = registers.getRegister("I")
+
+    for (let i = 0; i <= registerX; i++) {
+        const v = registers.getRegisterByInstruction(i)
+        emulatorMediator.setUint8(index++, v)
+    }
+}
+
+export const Load = (
+    instruction: number,
+    registers: RegistersInterface,
+    emulatorMediator: EmulatorMediator
+) => {
+    const registerX = (instruction & 0x0F00) >> 8;
+    let index = registers.getRegister("I")
+
+    for (let i = 0; i <= registerX; i++) {
+        registers.setRegisterByInstruction(i, emulatorMediator.getUint8(index++))
+    }
+}
+

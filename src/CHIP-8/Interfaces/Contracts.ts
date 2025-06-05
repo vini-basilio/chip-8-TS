@@ -2,7 +2,7 @@ import {EmulatorMediator} from "../Modules/EmulatorMediator/EmulatorMediator";
 
 export type CreateMemoryInterface = (sizeBytes: number) => DataView
 
-export abstract class DisplayAbstrat implements DisplayMethods{
+export abstract class DisplayAbstrat implements DisplayMethods {
     protected canvas!: HTMLCanvasElement;
     protected memorySize!: number;
 
@@ -10,31 +10,41 @@ export abstract class DisplayAbstrat implements DisplayMethods{
         this.canvas = canvas;
         this.memorySize = memorySize;
     }
+
     abstract getPixel(rows: number, cols: number): number
+
     abstract setPixel(rows: number, cols: number, state: number): void
+
     abstract ClearScreen(): void
+
     abstract DrawScreen(): void
 }
 
-export interface DisplayMethods{
+export interface DisplayMethods {
 
-     getPixel(rows: number, cols: number): number
-     setPixel(rows: number, cols: number, state: number): void
-     ClearScreen(): void
-     DrawScreen(): void
+    getPixel(rows: number, cols: number): number
+
+    setPixel(rows: number, cols: number, state: number): void
+
+    ClearScreen(): void
+
+    DrawScreen(): void
 }
 
 export interface MemoryInsterface {
     getUint8(bytes: number): number;
+
     setUint8(bytes: number, value: number): void;
+
     getUint16(bytes: number): number;
+
     setUint16(bytes: number, value: number): void;
 }
 
-export interface EmulatorMediatorInterface extends
-    RomLoaderInterface,
+export interface EmulatorMediatorInterface extends RomLoaderInterface,
     DisplayMethods,
-    MemoryInsterface {}
+    MemoryInsterface {
+}
 
 export interface RomLoaderInterface {
     LoaderListener(
@@ -42,21 +52,43 @@ export interface RomLoaderInterface {
         output: HTMLElement,
         loadRom: (arr: Uint8Array) => void): void;
 }
+
 export interface StackInterface extends MemoryInsterface {
     stackState(): string[];
 }
+
 export interface RegistersInterface {
     registerState(): string[];
+
     getRegister(name: string): number;
+
     getRegisterByInstruction(register: number): number;
+
     setRegisterName(name: string, value: number): void;
+
     setRegisterByInstruction(register: number, literal: number): void;
 }
 
-export interface CpuMediatorInterface extends
-    RegistersInterface{
+export interface CpuMediatorInterface extends RegistersInterface {
     stackState(): string[];
-    ZeroFamily(instruction: number): void;
-    BinaryFamily(instruction: number, display: EmulatorMediator): void;
+
+    TimersUpdate(): void;
+
+    FiveFamily(instruction: number, emulatorMediator: EmulatorMediator): void
+
+    ZeroFamily(instruction: number, display: EmulatorMediator): void;
+
+    BinaryFamily(instruction: number): void;
+
     BaseFamily(opcode: number, instruction: number): void;
+
+    FFamily(instruction: number, emulatorMediator: EmulatorMediatorInterface): void;
+
+    EFamily(instruction: number): void;
+}
+
+export interface EventEmitterIOInterface {
+    on(event: string, listener: CallableFunction): void
+
+    emit(event: string, ...args: unknown[]): void
 }

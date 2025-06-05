@@ -1,6 +1,6 @@
-import {CreateMemory} from "../Memory/CreateMemory";
-import {INSTRUCTIONS} from "./Instructions/instructions";
-import { EmulatorMediatorInterface} from "../../Interfaces/Contracts";
+import {CreateMemory} from "../Modules/Memory/CreateMemory";
+import {INSTRUCTIONS} from "../Modules/CPU/Instructions/Codes/instructions";
+import {EmulatorMediatorInterface} from "../Interfaces/Contracts";
 
 export class Cpu {
     registersNames: string[]
@@ -15,8 +15,8 @@ export class Cpu {
     stack: DataView
 
     constructor(
-                registerMemorySpace: typeof CreateMemory,
-                emulatorMediator: EmulatorMediatorInterface,
+        registerMemorySpace: typeof CreateMemory,
+        emulatorMediator: EmulatorMediatorInterface,
     ) {
         this.registersNames = [
             "V0", "V1", "V2",
@@ -48,29 +48,33 @@ export class Cpu {
         this.setRegisterName("SP", this.stack.byteLength - 2);
     }
 
-    debug(){
+    debug() {
 
         const registers = this.registersNames.map(name => {
-                const cc = this.getRegister(name);
-            return  `${name}: ${cc.toString(16).padStart(4, '0x').toUpperCase()}`
+            const cc = this.getRegister(name);
+            return `${name}: ${cc.toString(16).padStart(4, '0x').toUpperCase()}`
         })
         const stackState = []
-        for(let i = 0; i < this.stack.byteLength; i += 2 ){
+        for (let i = 0; i < this.stack.byteLength; i += 2) {
             const cc = this.stack.getUint16(i)
             stackState.push(cc.toString(16).padStart(4, '0x').toUpperCase());
         }
-        return [registers,  stackState];
+        return [registers, stackState];
     }
 
+    step() {
+        const instruction = this.fetch();
+        this.execute(instruction);
+    }
 
     // Manipulacao de registradores
-    private getRegister(name: string){
-        if(!(this.registersNames.includes(name))){
+    private getRegister(name: string) {
+        if (!(this.registersNames.includes(name))) {
             throw new Error(`getRegister: No such register '${name}'`)
         }
 
         const index = this.registerMapIndex.get(name)
-        if(index != undefined ) {
+        if (index != undefined) {
             return this.registersMemory.getUint16(index)
         }
         throw new Error(`getRegister: Error to get such register '${name}' value`)
@@ -80,27 +84,34 @@ export class Cpu {
         return this.registersMemory.getUint16(register * 2);
     }
 
-    private setRegisterName(name: string, value: number){
-        if(!(this.registersNames.includes(name))){
+    private setRegisterName(name: string, value: number) {
+        if (!(this.registersNames.includes(name))) {
             throw new Error(`setRegister: No such register '${name}'`)
         }
         const index = this.registerMapIndex.get(name)
-        if(index != undefined) return this.registersMemory.setUint16(index, value)
+        if (index != undefined) return this.registersMemory.setUint16(index, value)
         throw new Error(`setRegister: Error to set register '${name}' value`)
     }
+
+    // Buscas
 
     private setRegisterByInstruction(register: number, literal: number) {
         this.registersMemory.setUint16(register * 2, literal)
     }
-    // Buscas
+
+    /*
+    Tambem vi que eh comum se usar um switch case gigante
+    para as opercoes. Seguirei assim e talvez eu mude
+    */
+
     /*
        Por hora, vou implementar apenas um tipo de busca
        na RAM. A cada ciclo, quero uma instrucao inteira
    */
-    private fetch(){
+    private fetch() {
         const nextInstructionAddress = this.getRegister("PC");
 
-        if(nextInstructionAddress != undefined){
+        if (nextInstructionAddress != undefined) {
 
             const instruction = this.emulatorMediator.getUint16(nextInstructionAddress);
 
@@ -110,12 +121,7 @@ export class Cpu {
         throw new Error(`getRegister: Error to get new instruction`)
     }
 
-    /*
-    Tambem vi que eh comum se usar um switch case gigante
-    para as opercoes. Seguirei assim e talvez eu mude
-    */
-
-    private execute(instruction: number){
+    private execute(instruction: number) {
 
         const decode = (instruction: number) => {
             return (instruction & 0xF000) >> 12;
@@ -124,15 +130,14 @@ export class Cpu {
         const opcode = decode(instruction);
 
 
-
-        switch(opcode){
-            case INSTRUCTIONS.MOV_LIT_REG:{
+        switch (opcode) {
+            case INSTRUCTIONS.MOV_LIT_REG: {
                 const register = (instruction & 0x0F00) >> 8;
-                const literal =  (instruction & 0x00FF)
+                const literal = (instruction & 0x00FF)
                 this.setRegisterByInstruction(register, literal);
                 break;
             }
-            case INSTRUCTIONS.SET_INDEX_REGISTER:{
+            case INSTRUCTIONS.SET_INDEX_REGISTER: {
                 this.setRegisterName("I", (instruction & 0x0FFF))
                 break;
             }
@@ -147,7 +152,7 @@ export class Cpu {
             }
             case INSTRUCTIONS.RANDOM: {
                 const register = (instruction & 0x0F00) >> 8;
-                const literal =  (instruction & 0x00FF)
+                const literal = (instruction & 0x00FF)
                 const randomNum = Math.floor(Math.random() * 256)
                 const result = randomNum & literal
                 this.setRegisterByInstruction(register, result)
@@ -160,7 +165,7 @@ export class Cpu {
                 const registerY = (instruction & 0x00F0) >> 4;
                 const currentRegisterY = this.getRegisterByInstruction(registerY);
                 const currentPC = this.getRegister("PC")
-                if(currentRegisterX == currentRegisterY) this.setRegisterName("PC",  currentPC + 2)
+                if (currentRegisterX == currentRegisterY) this.setRegisterName("PC", currentPC + 2)
                 break;
             }
             case INSTRUCTIONS.NOT_EQUALS: {
@@ -169,7 +174,7 @@ export class Cpu {
                 const registerY = (instruction & 0x00F0) >> 4;
                 const currentRegisterY = this.getRegisterByInstruction(registerY);
                 const currentPC = this.getRegister("PC")
-                if(currentRegisterX != currentRegisterY) this.setRegisterName("PC",  currentPC + 2)
+                if (currentRegisterX != currentRegisterY) this.setRegisterName("PC", currentPC + 2)
                 break;
             }
             case INSTRUCTIONS.EQUALS_LIT: {
@@ -177,7 +182,7 @@ export class Cpu {
                 const currentRegisterValue = this.getRegisterByInstruction(register);
                 const literalValue = (instruction & 0x00FF);
                 const currentPC = this.getRegister("PC")
-                if(currentRegisterValue == literalValue) this.setRegisterName("PC",  currentPC + 2)
+                if (currentRegisterValue == literalValue) this.setRegisterName("PC", currentPC + 2)
                 break;
             }
             case INSTRUCTIONS.NOT_EQUAL_LIT: {
@@ -185,10 +190,10 @@ export class Cpu {
                 const currentRegisterValue = this.getRegisterByInstruction(register);
                 const literalValue = (instruction & 0x00FF);
                 const currentPC = this.getRegister("PC")
-                if(currentRegisterValue != literalValue) this.setRegisterName("PC",  currentPC + 2)
+                if (currentRegisterValue != literalValue) this.setRegisterName("PC", currentPC + 2)
                 break;
             }
-            case INSTRUCTIONS.ADD_LIT_TO_REGISTER:{
+            case INSTRUCTIONS.ADD_LIT_TO_REGISTER: {
                 const register = (instruction & 0x0F00) >> 8;
                 const currentRegisterValue = this.registersMemory.getUint16(register);
                 const literal = (instruction & 0x00FF)
@@ -200,7 +205,7 @@ export class Cpu {
                 const currentStackPointer = this.getRegister("SP")
                 this.stack.setUint16(currentStackPointer, this.getRegister("PC"))
                 this.setRegisterName("SP", currentStackPointer - 2)
-                this.setRegisterName("PC",(instruction & 0x0FFF))
+                this.setRegisterName("PC", (instruction & 0x0FFF))
                 break;
             }
             case INSTRUCTIONS.DRAW: {
@@ -216,11 +221,11 @@ export class Cpu {
                 this.setRegisterName("VF", 0);
 
                 // TO-DO retirar esse inner loop como fiz com a tela
-                for(let row = 0; row < rows; row++){
+                for (let row = 0; row < rows; row++) {
 
                     const spriteByte = this.emulatorMediator.getUint8(baseAddress + row)
 
-                    for(let col = 0; col < 8; col++){
+                    for (let col = 0; col < 8; col++) {
                         const spritePixel = (spriteByte >> (7 - col)) & 1;
 
                         const xOffset = (registerValueX + col) % 64;
@@ -240,12 +245,12 @@ export class Cpu {
                 break;
             }
         }
-        if(opcode == 0){
-            if(INSTRUCTIONS.CLEAR_SCREEN == (instruction & 0x0FFF)) {
+        if (opcode == 0) {
+            if (INSTRUCTIONS.CLEAR_SCREEN == (instruction & 0x0FFF)) {
                 this.emulatorMediator.ClearScreen();
                 return;
             }
-            if(INSTRUCTIONS.CALL_RET == (instruction & 0x0FFF)){
+            if (INSTRUCTIONS.CALL_RET == (instruction & 0x0FFF)) {
                 const stackPointer = this.getRegister("SP")
                 const stackPCValue = this.stack.getUint16(stackPointer)
                 this.setRegisterName("PC", stackPCValue)
@@ -253,8 +258,8 @@ export class Cpu {
                 return;
             }
         }
-        if(opcode == 0x8){
-            switch ((instruction & 0x000F)){
+        if (opcode == 0x8) {
+            switch ((instruction & 0x000F)) {
                 case 0x0: {
                     // Carrega no REG X o valor do REG Y
                     const registerX = (instruction & 0x0F00) >> 8;
@@ -360,11 +365,5 @@ export class Cpu {
                 }
             }
         }
-    }
-
-
-    step(){
-        const instruction = this.fetch();
-        this.execute(instruction);
     }
 }

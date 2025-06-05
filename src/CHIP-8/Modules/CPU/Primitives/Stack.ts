@@ -1,8 +1,9 @@
-import {StackInterface} from "../../Interfaces/Contracts";
-import {CreateMemory} from "../Memory/CreateMemory";
+import {StackInterface} from "../../../Interfaces/Contracts";
+import {CreateMemory} from "../../Memory/CreateMemory";
 
-export class Stack implements StackInterface{
+export class Stack implements StackInterface {
     stack: DataView;
+
     constructor(sizeStack: number) {
         this.stack = CreateMemory(sizeStack * 2)
     }
@@ -22,9 +23,10 @@ export class Stack implements StackInterface{
     setUint8(bytes: number, value: number): void {
         this.stack.setUint8(bytes, value)
     }
-    stackState(){
+
+    stackState() {
         const stackState = []
-        for(let i = 0; i < this.stack.byteLength; i += 2 ){
+        for (let i = 0; i < this.stack.byteLength; i += 2) {
             const cc = this.stack.getUint16(i)
             stackState.push(cc.toString(16).padStart(4, '0x').toUpperCase());
         }

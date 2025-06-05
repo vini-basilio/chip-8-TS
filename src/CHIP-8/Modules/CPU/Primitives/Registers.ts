@@ -1,5 +1,5 @@
-import {RegistersInterface} from "../../Interfaces/Contracts";
-import {CreateMemory} from "../Memory/CreateMemory";
+import {RegistersInterface} from "../../../Interfaces/Contracts";
+import {CreateMemory} from "../../Memory/CreateMemory";
 
 export class Registers implements RegistersInterface {
     registersNames: string[];
@@ -30,12 +30,14 @@ export class Registers implements RegistersInterface {
         this.setRegisterName("PC", 0x200)
         this.setRegisterName("SP", stackSize - 2);
     }
-    registerState(){
-        return  this.registersNames.map(name => {
+
+    registerState() {
+        return this.registersNames.map(name => {
             const cc = this.getRegister(name);
-            return  `${name}: ${cc.toString(16).padStart(4, '0x').toUpperCase()}`
+            return `${name}: ${cc.toString(16).padStart(4, '0x').toUpperCase()}`
         })
     }
+
     getRegister(name: string) {
         if (!(this.registersNames.includes(name))) {
             throw new Error(`getRegister: No such register '${name}'`)
