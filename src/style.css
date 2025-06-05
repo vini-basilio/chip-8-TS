@@ -21,6 +21,11 @@
 
 }
 
+a:link {
+    color: rgba(255, 255, 255, 0.87);
+    text-decoration: none;
+}
+
 .boxBorder {
     border: 1px solid var(--border-color);
 }
