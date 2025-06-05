@@ -43,27 +43,4 @@ if (romLoader && output) {
     Mediator.LoaderListener(romLoader, output);
 }
 
-// if (
-//     canvas != undefined
-//     && registerSection != undefined
-//     && stackSection != undefined
-//     && nextButton != undefined
-// ) {
-//
-//     const [registers, stack] = controlUnit.debug();
-//
-//     registerSection.innerHTML = CPUStates("REGISTERS", registers)
-//     stackSection.innerHTML = CPUStates("STACK", stack)
-//
-//     nextButton.addEventListener("click", () => {
-//
-//         controlUnit.step();
-//         Mediator.DrawScreen()
-//
-//         const [registers, stack] = controlUnit.debug();
-//
-//         registerSection.innerHTML = CPUStates("REGISTERS", registers)
-//         stackSection.innerHTML = CPUStates("STACK", stack)
-//     })
-// }
 
