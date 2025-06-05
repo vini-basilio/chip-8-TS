@@ -1,5 +1,5 @@
 # CHIP-8 em TS
-![image](https://github.com/user-attachments/assets/a716c5c1-65f3-4efb-a7a4-970618d32355)
+![image](https://github.com/user-attachments/assets/42148870-5bc0-4773-ac92-ed14af3a598f)
 
 Olá, este é meu primeiro projeto de emulação. E tem duas coisas que o fazem especial para mim:
 
@@ -53,4 +53,8 @@ Segue a lista dos recursos utilizados até o momento:
 - https://www.cs.columbia.edu/~sedwards/classes/2016/4840-spring/designs/Chip8.pdf
 - https://www.youtube.com/@LowByteProductions
 - Apostilas da faculdade
-- ROM do Logo da IBM -> https://github.com/loktar00/chip8/blob/master/roms/IBM%20Logo.ch8
+- ROM do Logo da IBM e suite de testes -> [https://github.com/loktar00/chip8/blob/master/roms/IBM%20Logo.ch8](https://github.com/JohnEarnest/chip8Archive/tree/master/roms)
+
+## Próximos passos
+- No momento, tenho implementado apenas instruções do CHIP-8 original, mas colocarei todas suportadas pelo Octo.
+- Também irei deixar algumas opções configuraveis, já que nem todas as implementações tinham o mesmo funcionamento de instrução.
