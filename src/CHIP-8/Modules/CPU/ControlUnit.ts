@@ -48,6 +48,21 @@ export class ControlUnit {
     }
 
     execute(opcode: number, instruction: number) {
+        /*
+        Quero dar suporte ao Octo, e tem uma instrucao em particular que e um problema,
+        e a LONG. Ela usa os 16 bit da instrucao para fazer jump na RAM. O que a faz
+        nao pussuir opcode nenhum. O Octo, pelo que li, usa um montador, para traduzir isso
+        para algo que a CPU entenda, lendo antes do long uma instrucao de chavemeando que é 0xF000.
+        Por hora, vou fazer um remendo e deixar como divida tecnica.
+
+        Para isso, vamos chamar fecth mais uma vez, e consumir o endereco, ja que essa funcao
+        chama dois 16 bit sempre
+
+
+        */
+        if (instruction == 0xF000) {
+            return this.cpuEmulatorMediator.LongMode(this.fetch())
+        }
         switch (opcode) {
             case 0x0:
                 return this.cpuEmulatorMediator.ZeroFamily(instruction, this.emulatorMediator)

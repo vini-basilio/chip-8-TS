@@ -38,3 +38,7 @@ export const LoadRegs = (
         registers.setRegisterByInstruction(i, emulatorMediator.getUint8(index++))
     }
 }
+
+export const ModeLong = () => {
+
+}

@@ -74,6 +74,8 @@ export interface CpuMediatorInterface extends RegistersInterface {
 
     TimersUpdate(): void;
 
+    LongMode(address: number): void;
+
     FiveFamily(instruction: number, emulatorMediator: EmulatorMediator): void
 
     ZeroFamily(instruction: number, display: EmulatorMediator): void;

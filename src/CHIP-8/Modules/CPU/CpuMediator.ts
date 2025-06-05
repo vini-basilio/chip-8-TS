@@ -86,6 +86,10 @@ export class CpuMediator implements CpuMediatorInterface {
         this.registers.setRegisterName(name, value)
     }
 
+    LongMode(address: number) {
+        this.registers.setRegisterName("I", address)
+    }
+
     BaseFamily(opcode: number, instruction: number) {
         switch (opcode) {
             case INSTRUCTIONS.MOV_LIT_REG:
