@@ -55,6 +55,8 @@ export interface RomLoaderInterface {
 
 export interface StackInterface extends MemoryInsterface {
     stackState(): string[];
+
+    StackSize(): number;
 }
 
 export interface RegistersInterface {
@@ -75,6 +77,8 @@ export interface CpuMediatorInterface extends RegistersInterface {
     TimersUpdate(): void;
 
     LongMode(address: number): void;
+
+    SetRegistersInitalState(): void;
 
     FiveFamily(instruction: number, emulatorMediator: EmulatorMediator): void
 

@@ -18,8 +18,8 @@ export class RomLoader implements RomLoaderInterface {
                 const rom = new Uint8Array(event.target!.result as ArrayBuffer);
                 loadRom(rom)
                 output.innerHTML = `
-                            <h3>ROM loaded: ${file.name}</h3>
-                            <p>Size: ${rom.length} bytes</p>`;
+                            <h3>ROM: ${file.name}</h3>
+                            <p>tamanho: ${rom.length} bytes</p>`;
                 return rom
             };
             reader.readAsArrayBuffer(file);

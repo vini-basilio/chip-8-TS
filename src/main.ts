@@ -32,7 +32,7 @@ const keyboard = new KeyboardController(bus)
 const stakeSize = 16;
 
 const cpuEmulatorMediator = new CpuMediator(
-    new Registers(stakeSize),
+    new Registers(),
     new Stack(stakeSize),
     bus
 )

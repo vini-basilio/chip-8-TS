@@ -16,6 +16,7 @@ export class ControlUnit {
         this.CPU_CYCLES_PER_FRAME = 8
         this.lastTimerUpdate = performance.now()
         emitter.on("start", () => {
+            this.cpuEmulatorMediator.SetRegistersInitalState()
             this.loop()
         });
     };

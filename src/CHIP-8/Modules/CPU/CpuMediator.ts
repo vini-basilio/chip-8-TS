@@ -48,6 +48,11 @@ export class CpuMediator implements CpuMediatorInterface {
 
     }
 
+    SetRegistersInitalState() {
+        this.registers.setRegisterName("PC", 0x200)
+        this.registers.setRegisterName("SP", this.stack.StackSize() - 2)
+    }
+
     TimersUpdate() {
         if (this.delayTimer > 0) {
             this.delayTimer--;

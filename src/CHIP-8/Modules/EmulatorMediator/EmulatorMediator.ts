@@ -41,11 +41,12 @@ export class EmulatorMediator implements EmulatorMediatorInterface {
         input: HTMLElement,
         output: HTMLElement
     ) {
+
         this.romLoader.LoaderListener(input, output, this.loadROM);
     }
 
     // Display
-    ClearScreen(): void {
+    ClearScreen = () => {
         this.display.ClearScreen();
     }
 
@@ -62,6 +63,11 @@ export class EmulatorMediator implements EmulatorMediatorInterface {
     }
 
     private loadROM = (Uint8Buffer: Uint8Array) => {
+        this.ClearScreen()
+        for (let i = 0x200; i < this.ram.byteLength; i++) {
+            this.ram.setUint8(i, 0);
+        }
+
         Uint8Buffer.forEach((n: number, index: number) => {
             this.ram.setUint8(index + 0x200, n);
         })

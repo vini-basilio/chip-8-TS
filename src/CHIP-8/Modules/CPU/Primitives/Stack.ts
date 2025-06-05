@@ -32,4 +32,8 @@ export class Stack implements StackInterface {
         }
         return stackState;
     }
+
+    StackSize() {
+        return this.stack.byteLength;
+    }
 }

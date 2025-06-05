@@ -6,7 +6,7 @@ export class Registers implements RegistersInterface {
     registersMemory: DataView;
     registerMapIndex: Map<string, number>
 
-    constructor(stackSize: number) {
+    constructor() {
         this.registersNames = [
             "V0", "V1", "V2",
             "V3", "V4", "V5",
@@ -27,8 +27,7 @@ export class Registers implements RegistersInterface {
             return map
         }, new Map())
 
-        this.setRegisterName("PC", 0x200)
-        this.setRegisterName("SP", stackSize - 2);
+
     }
 
     registerState() {
