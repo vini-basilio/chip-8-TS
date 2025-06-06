@@ -53,8 +53,13 @@ Segue a lista dos recursos utilizados até o momento:
 - https://www.cs.columbia.edu/~sedwards/classes/2016/4840-spring/designs/Chip8.pdf
 - https://www.youtube.com/@LowByteProductions
 - Apostilas da faculdade
-- ROM do Logo da IBM e suite de testes -> [https://github.com/loktar00/chip8/blob/master/roms/IBM%20Logo.ch8](https://github.com/JohnEarnest/chip8Archive/tree/master/roms)
+- ROM do Logo da IBM e suite de testes -> [rom](https://github.com/JohnEarnest/chip8Archive/tree/master/roms)
 
 ## Próximos passos
 - No momento, tenho implementado apenas instruções do CHIP-8 original, mas colocarei todas suportadas pelo Octo.
 - Também irei deixar algumas opções configuraveis, já que nem todas as implementações tinham o mesmo funcionamento de instrução.
+
+## O que penso que poderia melhorar
+Agora que terminei todo o conjunto de instruções do CHIP-8 original, comecei a buscar como outros desenvolvedores implementaram. Queria entender como programadores experientes resolveram os problemas que encontrei. Duas coisas me chamaram atenção. A primeia foi a solução de IO, apesar de já ter visto a solução aqui: [What is Memory Mapped I/O? 16-Bit VM in JavaScript 005](https://www.youtube.com/watch?v=hLYGTpvoMgE&list=PLP29wDx6QmW5DdwpdwHCRJsEubS5NrQ9b&index=5), não havia compreendido bem como portar esse código e acabei introduzindo muita complexidade. Também vejo como a própria CPU poderia ser mais eficiente. Quando comecei, este projeto, tinha pausado a série listada anteriormente, e comecei pensando em como portar. Acreditava que era uma abordagem muito robusta, e de fato era, até demais. Também pensei que usar uma abstração do control unit e funcões fosse melhor que apenas colocar tudo numa única classe; outro ponto que hoje faria diferente. Por fim, a abordagem da [engenheira de softwares Tania](https://www.taniarascia.com/writing-an-emulator-in-javascript-chip8/) sobre o problema do opcode não padronizado é extremamente elegante e resolve os edge cases que tive de forma simples. 
+
+
