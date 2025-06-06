@@ -59,7 +59,23 @@ Segue a lista dos recursos utilizados até o momento:
 - No momento, tenho implementado apenas instruções do CHIP-8 original, mas colocarei todas suportadas pelo Octo.
 - Também irei deixar algumas opções configuraveis, já que nem todas as implementações tinham o mesmo funcionamento de instrução.
 
-## O que penso que poderia melhorar
-Agora que terminei todo o conjunto de instruções do CHIP-8 original, comecei a buscar como outros desenvolvedores implementaram. Queria entender como programadores experientes resolveram os problemas que encontrei. Duas coisas me chamaram atenção. A primeia foi a solução de IO, apesar de já ter visto a solução aqui: [What is Memory Mapped I/O? 16-Bit VM in JavaScript 005](https://www.youtube.com/watch?v=hLYGTpvoMgE&list=PLP29wDx6QmW5DdwpdwHCRJsEubS5NrQ9b&index=5), não havia compreendido bem como portar esse código e acabei introduzindo muita complexidade. Também vejo como a própria CPU poderia ser mais eficiente. Quando comecei, este projeto, tinha pausado a série listada anteriormente, e comecei pensando em como portar. Acreditava que era uma abordagem muito robusta, e de fato era, até demais. Também pensei que usar uma abstração do control unit e funcões fosse melhor que apenas colocar tudo numa única classe; outro ponto que hoje faria diferente. Por fim, a abordagem da [engenheira de softwares Tania](https://www.taniarascia.com/writing-an-emulator-in-javascript-chip8/) sobre o problema do opcode não padronizado é extremamente elegante e resolve os edge cases que tive de forma simples. 
+## Conclusão
 
+Durante a execução do projeto, propus um desafio a mim: acessar apenas blogs e ler a documentação. Meus objetivos com essa abordagem eram claros:
 
+- Colocar em prática conhecimentos adquiridos na faculdade, já que "Arquitetura de computadores" é uma matéria completamente teórica.
+- Ser capaz de implementar um projeto relativamente grande.
+- Ser capaz de ler e aplicar documentação de baixo nível de abstração.
+
+Esses objetivos foram todos alcançados, já que minha implementação conseguiu executar ROMs de teste.
+
+A implementação era apenas parte do processo, o segundo estágio foi como comparar como desenvolvedores experientes solucionaram os mesmos problemas. 
+
+Algumas coisas me chamaram atenção:
+
+- Solução de IO:  já conhecia uma forma de solucionar IO, que foi ensinada aqui: [What is Memory Mapped I/O? 16-Bit VM in JavaScript 005](https://www.youtube.com/watch?v=hLYGTpvoMgE&list=PLP29wDx6QmW5DdwpdwHCRJsEubS5NrQ9b&index=5), entretanto, não consegui compreender como portá-la e acabei criando uma 
+solução baseada em Mediator. Muito complexa e nada flexível. 
+- Decodificação: segui de forma muito inflexível a ideia de que um opcode deve ser uma parte padrão da instrução, e quando me deparei com a falta de padrão do CHIP-8, tive dificuldades em adaptar meu código. Uma elegante solução para esta questão foi encontrada pela [engenheira de softwares Tania](https://www.taniarascia.com/writing-an-emulator-in-javascript-chip8/) 
+- Execução: acreditei que dividir o código em procedures reduziria a complexidade por arquivo. No fim, apenas acrescentou complexidade e criou forte acoplamento dos módulos.
+
+O balanço que faço sobre meus pontos a melhorar giram em torno da complexidade excessiva. Com a prática e leitura de código de outros desenvolvedores, acredito que essa questão tende a diminuir; especialmente acrescentando ao meu repertório de padrões de projeto.
