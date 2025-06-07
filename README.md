@@ -54,6 +54,7 @@ Segue a lista dos recursos utilizados até o momento:
 - https://www.youtube.com/@LowByteProductions
 - Apostilas da faculdade
 - ROM do Logo da IBM e suite de testes -> [rom](https://github.com/JohnEarnest/chip8Archive/tree/master/roms)
+- ROM do print -> [rom]([https://github.com/JohnEarnest/chip8Archive/tree/master/roms](https://github.com/Timendus/chip8-test-suite/blob/main/bin/1-chip8-logo.ch8))
 
 ## Próximos passos
 - No momento, tenho implementado apenas instruções do CHIP-8 original, mas colocarei todas suportadas pelo Octo.
