@@ -9,6 +9,10 @@ O segundo motivo é que essa é minha introdução ao low-level. Esse é um mér
 
 Por fim, acredito que alguns torcerão o nariz para estar criando o projeto em TypeScript. A razão é que essa é minha zona de conforto no momento. Uma linguagem, pelo menos para mim, que não sou nem JR, é mais que apenas sintaxe, existe todo um ecossistema e forma de se pensar numa solução. Cogitei em escrevê-lo em C, isso me ajudaria com o exigido na faculdade, mas teria que aprender muitas coisas de C enquanto também aprendo muitas coisas sobre arquitetura e organização de computadores para emulação, não fazia muito sentido. Então lembrei do projeto de porte do TS para Go e não Rust, acho que nem sempre a melhor escolha é a com melhor técnica.
 
+--
+## AVISO!
+Este repositório não será mais atualizado. Isto porque quando comecei este projeto, sabia poucas coisas sobre desenvolvimento, comparado com agora. Este projeto contém inúmeros erros de implementação e lógica, que causam bugs difíceis de serem rastreados. Mas é um projeto que tem importância pessoal por ser meu primeiro, por isso, não irei mais mexer nele. Entretanto, CHIP-8 se tornou um projeto muito especial para mim e continuarei a contribuir com a comunidade. O repositório: [chip-8-v2](https://github.com/vini-basilio/chip-8-v2/tree/main) contém a primiera versão totalmente estavel e aprovada pela suíte de testes Corax+ que você pode encontrar aqui: [testes](https://github.com/Timendus/chip8-test-suite/tree/main) com outras suítes. Além das documentações que cito no final deste README, acrescento a que acredito ser a melhor: [CHIP-8 Variant Opcode Table](https://chip8.gulrak.net/#quirk6). 
+
 ---
 ## Como funciona a extração das instruções
 Sem muito segredo, são apenas operações de bitwise. Todas as instruções serão listadas num arquivo a parte e checadas com switch/case.
